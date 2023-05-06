@@ -17,7 +17,9 @@
  */
 typedef struct data {
 
-	// The label corresponding to this particular example.
+	// The label corresponding to this particular example. Critically, GCC
+  // pads the 4 byte int to 8 bytes, and we will need to be careful to either
+  // replicate this in asm or adjust our loading code to not do the alignment
 	int label;
 
 	// The array of attributes corresponding to this particular example.
@@ -116,6 +118,11 @@ void ds_train_test_split(dataset *original, dataset *train_set,
  */
 void ds_show(dataset *ds);
 
+/**
+ * Normalizes all attributes in the dataset to have mean of 0 and standard
+ * deviation of 1. This generally boosts accuracy as no particular attribute
+ * gets weighted unfairly.
+ */ 
 void ds_normalize(dataset *ds);
 
 #endif

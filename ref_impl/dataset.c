@@ -316,13 +316,16 @@ void ds_show(dataset *ds) {
 }
 
 void ds_normalize(dataset *ds) {
+	// We iterate over attributes, finding mean and std. Have to go in three passes.
 	for(int i = 0; i < ds->num_attributes; i++) {
-		printf("i%d\n", i);
+		// First pass: compute the mean. mean = total / num_examples
 		double mean = 0;
 		for(int j = 0; j < ds->num_examples; j++) {
 			mean += ds->examples[j]->example[i];
 		}
 		mean /= ds->num_examples;
+
+		// Second pass: compute std. Std = sqrt(sum of squared differences / num_examples)
 		double std = 0;
 		for(int j = 0; j < ds->num_examples; j++) {
 			double diff = ds->examples[j]->example[i] - mean;
@@ -330,6 +333,8 @@ void ds_normalize(dataset *ds) {
 		}
 		std /= ds->num_examples;
 		std = sqrt(std);
+
+		// Third pass: rescale all attributes with mean and std
 		for(int j = 0; j < ds->num_examples; j++) {
 			ds->examples[j]->example[i] = (ds->examples[j]->example[i] - mean) / std;
 		}
