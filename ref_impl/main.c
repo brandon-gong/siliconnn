@@ -61,18 +61,28 @@ int main(int argc, char **argv) {
 	printf("\n----------TEST SET-----------\n");
 	ds_show(&te);
 
-	nn net;
-	nn_init(&net, 4, 8, 0.012);
-	nn_train(&net, &tr, 25);
-	//nn_log_accuracy(&net, &te);
+	nn neti, netf;
+	nn_init(&neti, 4, 8, 0.012);
+	nn_train(&neti, &tr, 25);
+
+	// for(int i = 0; i < te.num_examples; i++) {
+	// 	printf("%f\n", );
+	// }
+
+	printf("----------------------------\n");
+	nn_save(&neti, "test.nn");
+	//nn_destroy(&neti);
+
+	nn_load(&netf, "test.nn");
 	for(int i = 0; i < te.num_examples; i++) {
-		printf("%f\n", nn_forward(&net, te.examples[i]->example));
+		printf("%f - %f\n", nn_forward(&neti, te.examples[i]->example), nn_forward(&netf, te.examples[i]->example));
 	}
-	nn_save(&net, "test.nn");
+
+	printf("\n%f | %f\n", neti.b1[2], netf.b1[2]);
 
 	// Cleanup all memory
 	ds_destroy(&tr);
 	ds_destroy(&te);
 	ds_deep_destroy(&ds);
-	nn_destroy(&net);
+	nn_destroy(&netf);
 }

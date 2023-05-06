@@ -130,14 +130,15 @@ void nn_train(nn *net, dataset *ds, int num_epochs) {
 }
 
 void nn_save(nn *net, char *filepath) {
-	int fd = open(filepath, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU | S_IRWXG | S_IRWXO);
+	int fd = open(filepath, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU);
 	if (fd < 0) {
-		perror("nn_save");    
+		perror("nn_save");
 		exit(1);            
 	}
 	write(fd, &net->input_size, sizeof(int));
 	write(fd, &net->hidden_size, sizeof(int));
 	write(fd, &net->learning_rate, sizeof(double));
+	write(fd, &net->b2, sizeof(double));
 	int mem_size = _compute_mem_reqs(net->input_size, net->hidden_size);
 	write(fd, net->w01, mem_size);
 	close(fd);
@@ -161,12 +162,17 @@ void nn_load(nn *net, char *filepath) {
 	int input_size = *((int*) file_ptr);
 	int hidden_size = *((int*) (file_ptr + sizeof(int)));
 	double learning_rate = *((double*) (file_ptr + 2 * sizeof(int)));
-	err = munmap(file_ptr, 2 * sizeof(int) + sizeof(double));
+	double b2 = *((double*) (file_ptr + 2 * sizeof(int) + sizeof(double)));
+	double* w01 = (double*) (file_ptr + 2 * sizeof(int) + 2 * sizeof(double));
+	nn_init(net, input_size, hidden_size, learning_rate);
+	net->b2 = b2;
+	int mem_size = hidden_size * (input_size + 3);
+	for(int i = 0; i < mem_size; i++) {
+		net->w01[i] = w01[i];
+	}
+	err = munmap(file_ptr, statbuf.st_size);
 	if(err) {
-		perror("ds_destroy munmap");
+		perror("nn_load munmap");
 		exit(1);
 	}
-	file_ptr += 2 * sizeof(int) + sizeof(double);
-	nn_init(net, input_size, hidden_size, learning_rate);
-	net->w01 = (double*) file_ptr;
 }
