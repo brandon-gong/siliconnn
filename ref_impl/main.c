@@ -1,10 +1,31 @@
+/*
+ * This is the C reference implementation that will be transcribed to Assembly
+ * by hand. In order to make this work, we have to make sure that every stdlib
+ * call we make (functions we use that are included by #include <...>) is backed
+ * by either a straight arm64 instruction, or is a system call.
+ *
+ * Particularly of note, we don't have access to malloc. We get by this quite
+ * easily by using mmap instead; while mmap is potentially slower, it doesn't
+ * really matter for us, since we only need to allocate memory for ourselves
+ * a few times for loading the training data and making space for weights.
+ * All in all, mmap is called about 6-7 times total for initialization,
+ * training, and running, which is really not that much.
+ * 
+ * The code is also written to avoid recursion and avoid returning structs or
+ * anything complicated like that. However, it otherwise is decent quality;
+ * we don't skip over things like memory cleanup.
+ */
+
 #include <time.h>
 #include "dataset.h"
+#include "nn.h"
 
 /**
  * Set the random seed to system time. Otherwise, rand() will act like srand(1)
  * was called, and nothing will change between runs.
  * Seeding the randomizer is necessary for both ds_shuffle and nn_init.
+ * In the assembly implementation, we won't be using C library functions for
+ * random, and will have to rely on something like RNDR.
  */
 void seed() {
 	struct timespec t;
@@ -40,8 +61,18 @@ int main(int argc, char **argv) {
 	printf("\n----------TEST SET-----------\n");
 	ds_show(&te);
 
+	nn net;
+	nn_init(&net, 4, 8, 0.012);
+	nn_train(&net, &tr, 25);
+	//nn_log_accuracy(&net, &te);
+	for(int i = 0; i < te.num_examples; i++) {
+		printf("%f\n", nn_forward(&net, te.examples[i]->example));
+	}
+	nn_save(&net, "test.nn");
+
 	// Cleanup all memory
 	ds_destroy(&tr);
 	ds_destroy(&te);
 	ds_deep_destroy(&ds);
+	nn_destroy(&net);
 }
