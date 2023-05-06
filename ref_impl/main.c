@@ -41,14 +41,13 @@ void seed() {
 
 
 int main(int argc, char **argv) {
-
-
 	seed();
 
 	// Load a dataset from the CSV and shuffle it so everything is randomized
 	dataset ds;
-	ds_load("../test_sets/iris.csv", 151, 5, &ds);
-	//ds_normalize(&ds);
+	//ds_load("../test_sets/iris.csv", 151, 5, &ds);
+	ds_load("../test_sets/wine.csv", 179, 14, &ds);
+	ds_normalize(&ds);
 	ds_shuffle(&ds);
 
 	// Split the dataset into training and testing sets, with testing set being
