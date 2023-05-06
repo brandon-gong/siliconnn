@@ -39,9 +39,10 @@ void seed() {
 	srand(t.tv_sec);
 }
 
-// amazingly ds is done
-// now all thats left to do is nn
+
 int main(int argc, char **argv) {
+
+
 	seed();
 
 	// Load a dataset from the CSV and shuffle it so everything is randomized
@@ -53,6 +54,9 @@ int main(int argc, char **argv) {
 	// 20% the size of the original corpus, and training being the 80%.
 	dataset tr, te;
 	ds_train_test_split(&ds, &tr, &te, 0.2);
+	nn net;
+	nn_init(&net, 4, 8, 0.012);
+	nn_train(&net, &tr, 25);
 	
 	// Print everything out to make sure everything looks ok
 	printf("\n----------TRAIN SET-----------\n");
@@ -65,24 +69,24 @@ int main(int argc, char **argv) {
 	nn_init(&neti, 4, 8, 0.012);
 	nn_train(&neti, &tr, 25);
 
+	// // for(int i = 0; i < te.num_examples; i++) {
+	// // 	printf("%f\n", );
+	// // }
+
+	// printf("----------------------------\n");
+	// nn_save(&neti, "test.nn");
+	// //nn_destroy(&neti);
+
+	// nn_load(&netf, "test.nn");
 	// for(int i = 0; i < te.num_examples; i++) {
-	// 	printf("%f\n", );
+	// 	printf("%f - %f\n", nn_forward(&neti, te.examples[i]->example), nn_forward(&netf, te.examples[i]->example));
 	// }
 
-	printf("----------------------------\n");
-	nn_save(&neti, "test.nn");
-	//nn_destroy(&neti);
+	// printf("\n%f | %f\n", neti.b1[2], netf.b1[2]);
 
-	nn_load(&netf, "test.nn");
-	for(int i = 0; i < te.num_examples; i++) {
-		printf("%f - %f\n", nn_forward(&neti, te.examples[i]->example), nn_forward(&netf, te.examples[i]->example));
-	}
-
-	printf("\n%f | %f\n", neti.b1[2], netf.b1[2]);
-
-	// Cleanup all memory
-	ds_destroy(&tr);
-	ds_destroy(&te);
-	ds_deep_destroy(&ds);
-	nn_destroy(&netf);
+	// // Cleanup all memory
+	// ds_destroy(&tr);
+	// ds_destroy(&te);
+	// ds_deep_destroy(&ds);
+	// nn_destroy(&netf);
 }

@@ -24,7 +24,6 @@ void nn_backward(nn *net, double *x, int y);
 
 void nn_train(nn *net, dataset *ds, int num_epochs);
 int nn_predict(nn *net, double *x);
-void nn_log_accuracy(nn *net, dataset *ds);
 
 void nn_save(nn *net, char *filepath);
 void nn_load(nn *net, char *filepath);
