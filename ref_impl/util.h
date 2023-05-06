@@ -1,6 +1,10 @@
 #ifndef _UTIL_H_
 #define _UTIL_H_
 
+#include <time.h>
+#include <stdlib.h>
+#include <stdio.h>
+
 /**
  * This header file defines useful functions used in both nn.c and dataset.c.
  * For now, it is just two functions, itoa and dtoa.
@@ -29,5 +33,11 @@ int itoa(char *buf, int x);
  * @returns the length of the stringified double.
  */
 int dtoa(char *buf, double x, int precision);
+
+/**
+ * Seed the randomizer. Only in the C implementation, going to have to figure
+ * out something else for asm.
+ */
+void seed();
 
 #endif

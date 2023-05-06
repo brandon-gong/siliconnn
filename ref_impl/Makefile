@@ -1,13 +1,24 @@
 CC=gcc
 CFLAGS=-Wall
-TARGET=test
 
-all: $(TARGET)
+all: demo1 demo2 demo3
 
-test: main.o dataset.o nn.o util.o
-	$(CC) $(CFLAGS) $^ -o $(TARGET)
+demo3: demo3.o dataset.o nn.o util.o
+	$(CC) $(CFLAGS) $^ -o demo3
 
-main.o: main.c
+demo2: demo2.o dataset.o nn.o util.o
+	$(CC) $(CFLAGS) $^ -o demo2
+
+demo1: demo1.o dataset.o nn.o util.o
+	$(CC) $(CFLAGS) $^ -o demo1
+
+demo1.o: demo1.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+demo2.o: demo2.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+demo3.o: demo3.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 dataset.o: dataset.c dataset.h
@@ -21,4 +32,4 @@ util.o: util.c util.h
 
 .PHONY: clean
 clean:
-	rm -f *.o $(TARGET)
+	rm -f *.o demo1 demo2 demo3

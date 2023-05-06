@@ -1,3 +1,5 @@
+#include "util.h"
+
 /*
  * We don't support negative ints, simply because we don't need them!
  * This can very easily be expanded to support negatives at any point, I just
@@ -63,4 +65,16 @@ int dtoa(char *buf, double x, int precision) {
 		x = x - ((int) x);
 	}
 	return n;
+}
+
+void seed() {
+	struct timespec t;
+	// we have to do this instead of just time(NULL)
+	// because clock_gettime is a syscall and time is stdlib
+	if(clock_gettime(CLOCK_REALTIME, &t) == -1) {
+		perror("clock_gettime");
+		exit(1);
+	}
+	// Seed the randomizer with system time
+	srand(t.tv_sec);
 }
