@@ -9,7 +9,7 @@ void ds_destroy(dataset *ds) {
 	int err = munmap(ds->examples, ds->num_examples * sizeof(data*));
 	if(err) {
 		perror("ds_destroy munmap");
-		exit(1);
+		exit(8);
 	}
 }
 
@@ -27,7 +27,7 @@ void ds_deep_destroy(dataset *ds) {
 	int err = munmap(ds->_mmap_ptr, block_size);
 	if(err) {
 		perror("ds_deep_destroy munmap");
-		exit(1);
+		exit(9);
 	}
 
 	// Free ds->examples
@@ -177,7 +177,7 @@ void ds_load(char *filepath, int numrows, int numcols, dataset *ds) {
 		MAP_SHARED | MAP_ANONYMOUS, -1, 0);
 	if(data_ptr == MAP_FAILED) {
 		printf("data_ptr map failed\n");
-		exit(1);
+		exit(10);
 	}
 	// Save this ptr returned from mmap for freeing later
 	ds->_mmap_ptr = data_ptr;
@@ -186,21 +186,21 @@ void ds_load(char *filepath, int numrows, int numcols, dataset *ds) {
 	int fd = open(filepath, O_RDONLY);
 	if(fd < 0){
 		perror("open");
-		exit(1);
+		exit(11);
 	}
 	// Need to obtain the size of the file for mmap
 	struct stat statbuf;
 	int err = fstat(fd, &statbuf);
 	if(err < 0){
 		perror("fstat");
-		exit(1);
+		exit(12);
 	}
 	// CSV files may be quite large, so instead of `read` onto the stack into
 	// a huge buffer or something, much simpler to mmap into it
 	char *file_ptr = mmap(NULL, statbuf.st_size, PROT_READ, MAP_SHARED, fd, 0);
 	if(file_ptr == MAP_FAILED) {
 		printf("file_ptr map failed\n");
-		exit(1);
+		exit(13);
 	}
 	close(fd);
 
@@ -209,7 +209,7 @@ void ds_load(char *filepath, int numrows, int numcols, dataset *ds) {
 		PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
 	if(ds->examples == MAP_FAILED) {
 		printf("ds->examples map failed\n");
-		exit(1);
+		exit(14);
 	}
 
 	// file_ptr was returned by mmap and points to the first char in the file.
@@ -231,7 +231,7 @@ void ds_load(char *filepath, int numrows, int numcols, dataset *ds) {
 	err = munmap(file_ptr, statbuf.st_size);
 	if(err) {
 		perror("munmap");
-		exit(1);
+		exit(15);
 	}
 }
 

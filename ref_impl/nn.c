@@ -80,7 +80,7 @@ void nn_destroy(nn *net) {
 	int err = munmap(net->w01, mem_size);
 	if(err) {
 		perror("nn_destroy munmap");
-		exit(1);
+		exit(2);
 	}
 }
 
@@ -186,7 +186,7 @@ void nn_save(nn *net, char *filepath) {
 	int fd = open(filepath, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU);
 	if (fd < 0) {
 		perror("nn_save");
-		exit(1);            
+		exit(3);            
 	}
 	write(fd, &net->input_size, sizeof(int));
 	write(fd, &net->hidden_size, sizeof(int));
@@ -211,19 +211,23 @@ void nn_load(nn *net, char *filepath) {
 	int fd = open(filepath, O_RDONLY);
 	if(fd < 0){
 		perror("open");
-		exit(1);
+		exit(4);
 	}
 	// Need to obtain the size of the file for mmap
 	struct stat statbuf;
 	int err = fstat(fd, &statbuf);
 	if(err < 0){
 		perror("fstat");
-		exit(1);
+		exit(5);
 	}
 
 	// Very much the reverse operation from save, we just read the file at certain
 	// places and those are the exact values we need to populate the struct
 	void *file_ptr = mmap(NULL, statbuf.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
+	if(file_ptr == MAP_FAILED) {
+		printf("file_ptr map failed\n");
+		exit(6);
+	}
 	int input_size = *((int*) file_ptr);
 	int hidden_size = *((int*) (file_ptr + sizeof(int)));
 	double learning_rate = *((double*) (file_ptr + 2 * sizeof(int)));
@@ -240,7 +244,7 @@ void nn_load(nn *net, char *filepath) {
 	err = munmap(file_ptr, statbuf.st_size);
 	if(err) {
 		perror("nn_load munmap");
-		exit(1);
+		exit(7);
 	}
 	close(fd);
 }
