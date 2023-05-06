@@ -46,7 +46,8 @@ int main(int argc, char **argv) {
 	// Load a dataset from the CSV and shuffle it so everything is randomized
 	dataset ds;
 	//ds_load("../test_sets/iris.csv", 151, 5, &ds);
-	ds_load("../test_sets/wine.csv", 179, 14, &ds);
+	//ds_load("../test_sets/wine.csv", 179, 14, &ds);
+	ds_load("../test_sets/breast-cancer-wisconsin.csv", 570, 31, &ds);
 	ds_normalize(&ds);
 	ds_shuffle(&ds);
 
@@ -61,7 +62,7 @@ int main(int argc, char **argv) {
 	ds_show(&te);
 	nn net;
 	nn_init(&net, 4, 8, 0.012);
-	nn_train(&net, &tr, 25);
+	nn_train(&net, &tr, 40);
 
 	// ds_destroy(&tr);
 	// ds_destroy(&te);
