@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
+#include "util.h"
 
 /**
  * Defines a single labeled example that can be used in training or testing.

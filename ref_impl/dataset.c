@@ -298,15 +298,24 @@ void ds_train_test_split(
 }
 
 void ds_show(dataset *ds) {
+	char buf[32];
+	int sz;
+
 	// Also print out row numbers, helpful for making sure we are getting the
 	// number of examples in the set that we expect
 	for(int i = 0; i < ds->num_examples; i++) {
 		// Print the row number and label
-		printf("%d | %d", i, ds->examples[i]->label);
+		sz = itoa(buf, i);
+		write(STDOUT_FILENO, buf, sz);
+		write(STDOUT_FILENO, " | ", 3);
+		sz = itoa(buf, ds->examples[i]->label);
+		write(STDOUT_FILENO, buf, sz);
 		// print all the attrs for the example
 		for(int j = 0; j < ds->num_attributes; j++) {
-			printf(",%.1f", ds->examples[i]->example[j]);
+			write(STDOUT_FILENO, ",", 1);
+			sz = dtoa(buf,  ds->examples[i]->example[j], 1);
+			write(STDOUT_FILENO, buf, sz);
 		}
-		printf("\n");
+		write(STDOUT_FILENO, "\n", 1);
 	}
 }

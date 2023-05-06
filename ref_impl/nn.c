@@ -93,41 +93,6 @@ void nn_backward(nn *net, double *x, int y) {
 	}
 }
 
-int _itoa(char *buf, int x) {
-	int n = 0;
-	if (x == 0) {
-		buf[0] = '0';
-		return 1;
-	}
-	while (x > 0) {
-		buf[n] = (x % 10) + '0';
-		x /= 10;
-		n++;
-	}
-
-	for(int i = 0; i < n / 2; i++) {
-		char tmp = buf[i];
-		buf[i]  = buf[n - i - 1];
-		buf[n - i - 1] = tmp;
-	}
-	
-	return n;
-}
-
-int _dtoa(char *buf, double x, int precision) {
-	int n = _itoa(buf, (int) x);
-	buf[n++] = '.';
-	if (x < 0) x *= -1;
-	x = x - ((int) x);
-	for(int i = 0; i < precision; i++) {
-		x *= 10;
-		buf[n] = ((char) x) + '0';
-		n++;
-		x = x - ((int) x);
-	}
-	return n;
-}
-
 double nn_average_loss(nn *net, dataset *ds) {
 	double total_loss = 0;
 	for(int i = 0; i < ds->num_examples; i++) {
@@ -141,7 +106,7 @@ double nn_average_loss(nn *net, dataset *ds) {
 // fprop and bprop done, just need to impl accuracy and train methods, and
 // saving / loading model
 void nn_train(nn *net, dataset *ds, int num_epochs) {
-	char buf[512];
+	char buf[32];
 	int sz;
 	for(int i = 0; i < num_epochs; i++) {
 		for(int j = 0; j < ds->num_examples; j++) {
@@ -150,10 +115,10 @@ void nn_train(nn *net, dataset *ds, int num_epochs) {
 		}
 		double loss = nn_average_loss(net, ds);
 		write(STDOUT_FILENO, "Epoch ", 6);
-		sz = _itoa(buf, i);
+		sz = itoa(buf, i);
 		write(STDOUT_FILENO, buf, sz);
 		write(STDOUT_FILENO, " | Loss: ", 9);
-		sz = _dtoa(buf, loss, 10);
+		sz = dtoa(buf, loss, 10);
 		write(STDOUT_FILENO, buf, sz);
 		write(STDOUT_FILENO, "\n", 1);
 

@@ -54,20 +54,30 @@ int main(int argc, char **argv) {
 	// 20% the size of the original corpus, and training being the 80%.
 	dataset tr, te;
 	ds_train_test_split(&ds, &tr, &te, 0.2);
-	nn net;
-	nn_init(&net, 4, 8, 0.012);
-	nn_train(&net, &tr, 25);
-	
-	// Print everything out to make sure everything looks ok
 	printf("\n----------TRAIN SET-----------\n");
 	ds_show(&tr);
 
 	printf("\n----------TEST SET-----------\n");
 	ds_show(&te);
+	nn net;
+	nn_init(&net, 4, 8, 0.012);
+	nn_train(&net, &tr, 25);
 
-	nn neti, netf;
-	nn_init(&neti, 4, 8, 0.012);
-	nn_train(&neti, &tr, 25);
+	ds_destroy(&tr);
+	ds_destroy(&te);
+	ds_deep_destroy(&ds);
+	nn_destroy(&net);
+	
+	// Print everything out to make sure everything looks ok
+	// printf("\n----------TRAIN SET-----------\n");
+	// ds_show(&tr);
+
+	// printf("\n----------TEST SET-----------\n");
+	// ds_show(&te);
+
+	// nn neti, netf;
+	// nn_init(&neti, 4, 8, 0.012);
+	// nn_train(&neti, &tr, 25);
 
 	// // for(int i = 0; i < te.num_examples; i++) {
 	// // 	printf("%f\n", );

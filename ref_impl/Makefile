@@ -4,7 +4,7 @@ TARGET=test
 
 all: $(TARGET)
 
-test: main.o dataset.o nn.o
+test: main.o dataset.o nn.o util.o
 	$(CC) $(CFLAGS) $^ -o $(TARGET)
 
 main.o: main.c
@@ -14,6 +14,9 @@ dataset.o: dataset.c dataset.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
 nn.o: nn.c nn.h
+	$(CC) $(CFLAGS) -c $< -o $@
+
+util.o: util.c util.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
 .PHONY: clean
