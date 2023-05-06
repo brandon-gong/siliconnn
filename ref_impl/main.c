@@ -48,6 +48,7 @@ int main(int argc, char **argv) {
 	// Load a dataset from the CSV and shuffle it so everything is randomized
 	dataset ds;
 	ds_load("../test_sets/iris.csv", 151, 5, &ds);
+	//ds_normalize(&ds);
 	ds_shuffle(&ds);
 
 	// Split the dataset into training and testing sets, with testing set being
@@ -63,10 +64,10 @@ int main(int argc, char **argv) {
 	nn_init(&net, 4, 8, 0.012);
 	nn_train(&net, &tr, 25);
 
-	ds_destroy(&tr);
-	ds_destroy(&te);
-	ds_deep_destroy(&ds);
-	nn_destroy(&net);
+	// ds_destroy(&tr);
+	// ds_destroy(&te);
+	// ds_deep_destroy(&ds);
+	// nn_destroy(&net);
 	
 	// Print everything out to make sure everything looks ok
 	// printf("\n----------TRAIN SET-----------\n");

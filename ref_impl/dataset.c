@@ -138,10 +138,7 @@ double _parse_double(char **ptr) {
 void _parse_data(char **ptr, data *d, int num_attributes, char *end) {
 	// Consume the label first
 	d->label = _parse_int(ptr);
-	// To be honest I'm not exactly sure why the 2* is correct. But we need to
-	// Initialize d->example to point to the beginning of the example array,
-	// which (with our setup) occurs in memory right after this pointer
-	d->example = (double*) ((long) d + sizeof(int) + 2*sizeof(double*));
+	d->example = (double*) ((long) d + sizeof(data));
 
 	// Parse all of the attributes in this row
 	for(int i = 0; i < num_attributes; i++) {
@@ -172,8 +169,7 @@ void ds_load(char *filepath, int numrows, int numcols, dataset *ds) {
 	// without moving anything.
 
 	// We first compute the total size we need to allocate
-	size_t data_size = sizeof(int) + sizeof(double*)
-		+ ds->num_attributes * sizeof(double);
+	size_t data_size = sizeof(data) + ds->num_attributes * sizeof(double);
 	size_t block_size = ds->num_examples * data_size;
 
 	// key flag is MAP_ANONYMOUS, and we need RW access
@@ -281,7 +277,6 @@ void ds_train_test_split(
 	test_set->_mmap_ptr = NULL;
 	train_set->_mmap_ptr = NULL;
 
-	// 
 	test_set->examples = mmap(NULL, sizeof(data*) * test_size,
 		PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
 	train_set->examples = mmap(NULL, sizeof(data*) * train_size,
@@ -317,5 +312,26 @@ void ds_show(dataset *ds) {
 			write(STDOUT_FILENO, buf, sz);
 		}
 		write(STDOUT_FILENO, "\n", 1);
+	}
+}
+
+void ds_normalize(dataset *ds) {
+	for(int i = 0; i < ds->num_attributes; i++) {
+		printf("i%d\n", i);
+		double mean = 0;
+		for(int j = 0; j < ds->num_examples; j++) {
+			mean += ds->examples[j]->example[i];
+		}
+		mean /= ds->num_examples;
+		double std = 0;
+		for(int j = 0; j < ds->num_examples; j++) {
+			double diff = ds->examples[j]->example[i] - mean;
+			std += diff * diff;
+		}
+		std /= ds->num_examples;
+		std = sqrt(std);
+		for(int j = 0; j < ds->num_examples; j++) {
+			ds->examples[j]->example[i] = (ds->examples[j]->example[i] - mean) / std;
+		}
 	}
 }

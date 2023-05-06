@@ -2,7 +2,6 @@
 #define _NN_H_
 
 #include "dataset.h"
-#include <math.h>
 
 typedef struct nn {
 	int input_size;

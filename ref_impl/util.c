@@ -20,7 +20,19 @@ int itoa(char *buf, int x) {
 }
 
 int dtoa(char *buf, double x, int precision) {
-	int n = itoa(buf, (int) x);
+	if (x == 0) {
+		buf[0] = '0';
+		return 1;
+	}
+
+	int isneg = 0;
+	if (x < 0) {
+		isneg = 1;
+		buf[0] = '-';
+		x *= -1;
+	}
+	int n = itoa(buf + isneg, (int) x);
+	n += isneg;
 	buf[n++] = '.';
 	if (x < 0) x *= -1;
 	x = x - ((int) x);

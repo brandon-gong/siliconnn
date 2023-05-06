@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
+#include <math.h>
 #include "util.h"
 
 /**
@@ -114,5 +115,7 @@ void ds_train_test_split(dataset *original, dataset *train_set,
  * @param ds the dataset to print.
  */
 void ds_show(dataset *ds);
+
+void ds_normalize(dataset *ds);
 
 #endif
