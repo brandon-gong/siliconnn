@@ -1,5 +1,7 @@
 #include "dataset.h"
 
+extern void consume_past_char(char **ptr, char *end, char c);
+
 /*
  * Just need to munmap the `examples` part of the struct, since we don't want
  * to free the underlying data in this case.
@@ -46,13 +48,13 @@
  * 	are no more of c to consume. Without this, we may sigfault
  * @param c the character to consume past.
  */
-void C_consume_past_char(char **ptr, char *end, char c) {
-	while(**ptr != c) {
-		(*ptr)++;
-		if (*ptr == end) return;
-	}
-	(*ptr)++;
-}
+// void C_consume_past_char(char **ptr, char *end, char c) {
+// 	while(**ptr != c) {
+// 		(*ptr)++;
+// 		if (*ptr == end) return;
+// 	}
+// 	(*ptr)++;
+// }
 
 /*
  * Helper function to parse an int. Also moves the ptr past the int so it is
@@ -142,12 +144,12 @@ void C_parse_data(char **ptr, data *d, int num_attributes, char *end) {
 
 	// Parse all of the attributes in this row
 	for(int i = 0; i < num_attributes; i++) {
-		C_consume_past_char(ptr, end, ',');
+		consume_past_char(ptr, end, ',');
 		d->example[i] = C_parse_double(ptr);
 	}
 
 	// Move ptr to next row
-	C_consume_past_char(ptr, end, '\n');
+	consume_past_char(ptr, end, '\n');
 }
 
 /*
@@ -218,7 +220,7 @@ void Cds_load(char *filepath, int numrows, int numcols, dataset *ds) {
 	char *end = file_ptr + statbuf.st_size;
 
 	// skip first line
-	C_consume_past_char(&parse_ptr, end, '\n');
+	consume_past_char(&parse_ptr, end, '\n');
 	// Parse row-by-row into underlying memory, and also save each index into
 	// ds->examples
 	for (int i = 0; i < ds->num_examples; i++) {

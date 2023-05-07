@@ -35,13 +35,15 @@ int main(void) {
   // Cds_destroy(&train);
   // Cds_destroy(&test);
   // Cds_deep_destroy(&ds);
-
-  extern void ds_deep_destroy(dataset *ds);
   
   dataset ds;
   Cds_load("../test_sets/wine.csv", 179, 14, &ds);
-  printf("%d\n", ds._mmap_ptr[0].label);
-  printf("%d\n", ds.num_attributes);
+  Cds_show(&ds);
   ds_deep_destroy(&ds);
-  printf("%d\n", ds._mmap_ptr[0].label);
+
+  // extern void consume_past_char(char** ptr, char *end, char c);
+  // char *s = "qeertw";
+  // char *end = s + 6;
+  // consume_past_char(&s, end, 'w');
+  // printf("sruvi%s\n", s);
 }

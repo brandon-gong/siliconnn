@@ -67,7 +67,8 @@ extern void ds_destroy(dataset *ds);
  * 
  * @param ds a pointer to the dataset to deeply destroy.
  */
-void Cds_deep_destroy(dataset *ds);
+extern void ds_deep_destroy(dataset *ds);
+//void Cds_deep_destroy(dataset *ds);
 
 
 /**

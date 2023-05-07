@@ -17,3 +17,35 @@ _ds_num_examples:
 	MOV W0, W1
 	ret
 	*/
+
+/*
+// extern long myrand();
+.global _myrand
+.align 2
+
+_myrand:
+	LSR seed #12 // X0 = seed >> 12
+	EOR X0 seed X0  // X0 = seed ^ (seed >> 12)
+	LSL X1 X0 #25
+	EOR X0 X1 X0
+	LSR X1 X0 #27
+	EOR X0 X1 X0
+	STR X0, seed
+	RET
+
+.seed: .quad 1
+*/
+
+
+
+
+/* 
+.global _inc_pointer
+.align 2
+
+_inc_pointer:
+	LDR W1, [X0]
+	ADD W1, W1, #1
+	STR W1, [X0]
+	RET
+*/

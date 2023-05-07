@@ -21,13 +21,13 @@ _ds_destroy:
 	LDR X0, [X0]              // Dereference X0 to obtain pointer to examples
 	MOV	X16, #73              // syscall code for munmap is 73
 	SVC	#0x80                 // munmap(X0, W1)
-	CBNZ X0, ds_destroy_exit  // If syscall returned nonzero code, exit with error
+	CBNZ X0, exit  // If syscall returned nonzero code, exit with error
 	RET                       // Return back to caller
 
 // The only way this label is reached is from the CBNZ instruction from above
 // (equivalent to if(err != 0) error checking in C). Here, we want to exit
 // with code 8, which will signify a munmap error in ds_destroy.
-ds_destroy_exit:
+exit:
 	MOV X0, #8   // X0 = 8
 	MOV X16, #1  // syscall code for exit is 1
 	SVC #0x80    // exit(X0)

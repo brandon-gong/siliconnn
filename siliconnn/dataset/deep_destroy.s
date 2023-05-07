@@ -29,7 +29,7 @@ _ds_deep_destroy:
 	LDR X0, [X0, #16]              // X0 = ds->_mmap_ptr
 	MOV	X16, #73                   // syscall code for munmap is 73
 	SVC	#0x80                      // munmap(X0, W1)
-	CBNZ X0, ds_deep_destroy_exit  // If syscall returned nonzero code, exit with error
+	CBNZ X0, exit  // If syscall returned nonzero code, exit with error
 	
 	// We now prepare to invoke ds_destroy. We need to put the original dataset
 	// pointer back into X0 so its the first argument, and also *store our return
@@ -42,7 +42,7 @@ _ds_deep_destroy:
 
 // This is very similar to the exit in ds_destroy; we reach here if something
 // went wrong with munmap, in which we exit with the appropriate exit code (9).
-ds_deep_destroy_exit:
+exit:
 	MOV X0, #9   // X0 = 9
 	MOV X16, #1  // syscall code for exit is 1
 	SVC #0x80    // exit(X0)
