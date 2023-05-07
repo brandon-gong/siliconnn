@@ -36,11 +36,12 @@ int main(void) {
   // Cds_destroy(&test);
   // Cds_deep_destroy(&ds);
 
-  //extern int ds_num_examples(dataset *ds);
+  extern void ds_deep_destroy(dataset *ds);
   
   dataset ds;
   Cds_load("../test_sets/wine.csv", 179, 14, &ds);
-  printf("%f\n", ds.examples[0]->example[0]);
-  Cds_deep_destroy(&ds);
-  printf("%f\n", ds.examples[0]->example[0]);
+  printf("%d\n", ds._mmap_ptr[0].label);
+  printf("%d\n", ds.num_attributes);
+  ds_deep_destroy(&ds);
+  printf("%d\n", ds._mmap_ptr[0].label);
 }

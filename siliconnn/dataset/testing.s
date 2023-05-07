@@ -13,8 +13,7 @@ _ds_dbl_val:
 .align 2
 
 _ds_num_examples:
-	LDR W1, [X0, #8]
+	LDR W1, [X0, #12]
 	MOV W0, W1
 	ret
-*/
-
+	*/

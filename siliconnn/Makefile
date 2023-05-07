@@ -3,7 +3,7 @@ CFLAGS=-Wall
 
 all: demo1
 
-demo1: demo1.o dataset.o nn.o util.o testing.o ds_destroy.o
+demo1: demo1.o dataset.o nn.o util.o testing.o ds_destroy.o ds_deep_destroy.o
 	$(CC) $(CFLAGS) $^ -o demo1
 
 dataset.o: dataset.c dataset.h 
@@ -20,6 +20,9 @@ testing.o: dataset/testing.s
 
 ds_destroy.o: dataset/destroy.s
 	as -arch arm64 -o ds_destroy.o dataset/destroy.s
+
+ds_deep_destroy.o: dataset/deep_destroy.s
+	as -arch arm64 -o ds_deep_destroy.o dataset/deep_destroy.s
 
 .PHONY: clean
 clean:

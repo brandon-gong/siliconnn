@@ -17,22 +17,22 @@
  * To ds_deep_destroy, just need to munmap the saved `_mmap_ptr` and then call
  * ds_destroy to handle the rest.
  */
-void Cds_deep_destroy(dataset *ds) {
-	// Compute the size of the block. This is duplicate code from loading,
-	// TODO does it make sense to restructure this?
-	size_t data_size = sizeof(int) + ds->num_attributes * sizeof(double);
-	size_t block_size = ds->num_examples * data_size;
+// void Cds_deep_destroy(dataset *ds) {
+// 	// Compute the size of the block. This is duplicate code from loading,
+// 	// TODO does it make sense to restructure this?
+// 	size_t data_size = sizeof(int) + ds->num_attributes * sizeof(double);
+// 	size_t block_size = ds->num_examples * data_size;
 
-	// Free the underlying data
-	int err = munmap(ds->_mmap_ptr, block_size);
-	if(err) {
-		perror("ds_deep_destroy munmap");
-		exit(9);
-	}
+// 	// Free the underlying data
+// 	int err = munmap(ds->_mmap_ptr, block_size);
+// 	if(err) {
+// 		perror("ds_deep_destroy munmap");
+// 		exit(9);
+// 	}
 
-	// Free ds->examples
-	ds_destroy(ds);
-}
+// 	// Free ds->examples
+// 	ds_destroy(ds);
+// }
 
 /*
  * In our CSV parser we frequently find ourselves needing to throw away parts
