@@ -37,8 +37,6 @@ _myrand:
 */
 
 
-
-
 /* 
 .global _inc_pointer
 .align 2

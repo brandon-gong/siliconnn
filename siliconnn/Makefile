@@ -3,7 +3,7 @@ CFLAGS=-Wall
 
 all: demo1
 
-demo1: demo1.o dataset.o nn.o util.o testing.o ds_destroy.o ds_deep_destroy.o ds_consume_past_char.o
+demo1: demo1.o dataset.o nn.o util.o testing.o ds_destroy.o ds_deep_destroy.o ds_consume_past_char.o ds_parse_int.o
 	$(CC) $(CFLAGS) $^ -o demo1
 
 dataset.o: dataset.c dataset.h 
@@ -26,6 +26,9 @@ ds_deep_destroy.o: dataset/deep_destroy.s
 
 ds_consume_past_char.o: dataset/consume_past_char.s
 	as -arch arm64 -o ds_consume_past_char.o dataset/consume_past_char.s
+
+ds_parse_int.o: dataset/parse_int.s
+	as -arch arm64 -o ds_parse_int.o dataset/parse_int.s
 
 .PHONY: clean
 clean:

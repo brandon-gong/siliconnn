@@ -36,14 +36,19 @@ int main(void) {
   // Cds_destroy(&test);
   // Cds_deep_destroy(&ds);
   
-  dataset ds;
-  Cds_load("../test_sets/wine.csv", 179, 14, &ds);
-  Cds_show(&ds);
-  ds_deep_destroy(&ds);
+  // dataset ds;
+  // Cds_load("../test_sets/wine.csv", 179, 14, &ds);
+  // Cds_show(&ds);
+  // ds_deep_destroy(&ds);
 
   // extern void consume_past_char(char** ptr, char *end, char c);
   // char *s = "qeertw";
   // char *end = s + 6;
   // consume_past_char(&s, end, 'w');
   // printf("sruvi%s\n", s);
+
+  extern int parse_int(char **ptr);
+  char* test = "-23qwer4\n";
+  int x = parse_int(&test);
+  printf("%d\n%s\n", x, test);
 }

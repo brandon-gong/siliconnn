@@ -1,6 +1,7 @@
 #include "dataset.h"
 
 extern void consume_past_char(char **ptr, char *end, char c);
+extern int parse_int(char **ptr);
 
 /*
  * Just need to munmap the `examples` part of the struct, since we don't want
@@ -60,31 +61,31 @@ extern void consume_past_char(char **ptr, char *end, char c);
  * Helper function to parse an int. Also moves the ptr past the int so it is
  * pointing at the next character which is not part of the int.
  */
-int C_parse_int(char **ptr) {
-	// the result
-	int r = 0;
+// int C_parse_int(char **ptr) {
+// 	// the result
+// 	int r = 0;
 
-	// the sign of the result
-	int sgn = 1;
+// 	// the sign of the result
+// 	int sgn = 1;
 
-	// we only check the sign on the first character; a sign anywhere else is
-	// considered invalid
-	if (**ptr == '-') {
-		sgn = -1;
-		(*ptr)++;
-	}
+// 	// we only check the sign on the first character; a sign anywhere else is
+// 	// considered invalid
+// 	if (**ptr == '-') {
+// 		sgn = -1;
+// 		(*ptr)++;
+// 	}
 
-	// While we keep seeing digits, append them to our result, and keep
-	// updating ptr
-	while (**ptr >= '0' && **ptr <= '9') {
-		r = r * 10 + (**ptr - '0');
-		(*ptr)++;
-	}
+// 	// While we keep seeing digits, append them to our result, and keep
+// 	// updating ptr
+// 	while (**ptr >= '0' && **ptr <= '9') {
+// 		r = r * 10 + (**ptr - '0');
+// 		(*ptr)++;
+// 	}
 
-	// We've hit some character that is not part of the number (e.g. comma),
-	// so stop incrementing ptr and return r with the right sign.
-	return sgn*r;
-}
+// 	// We've hit some character that is not part of the number (e.g. comma),
+// 	// so stop incrementing ptr and return r with the right sign.
+// 	return sgn*r;
+// }
 
 /*
  * Helper function to parse a float. Some similar ideas to int, except we also
@@ -139,7 +140,7 @@ double C_parse_double(char **ptr) {
  */
 void C_parse_data(char **ptr, data *d, int num_attributes, char *end) {
 	// Consume the label first
-	d->label = C_parse_int(ptr);
+	d->label = parse_int(ptr);
 	d->example = (double*) ((long) d + sizeof(data));
 
 	// Parse all of the attributes in this row
