@@ -2,6 +2,7 @@
 
 extern void consume_past_char(char **ptr, char *end, char c);
 extern int parse_int(char **ptr);
+extern double parse_double(char **ptr);
 
 /*
  * Just need to munmap the `examples` part of the struct, since we don't want
@@ -93,46 +94,46 @@ extern int parse_int(char **ptr);
  * is otherwise somewhat durable; "-.3", "-00.0001", "091.100" all successfully
  * parse
  */
-double C_parse_double(char **ptr) {
-	double r = 0.0;
-	int sgn = 1;
+// double C_parse_double(char **ptr) {
+// 	double r = 0.0;
+// 	int sgn = 1;
 
-	// A flag telling us whether or not we've seen a decimal point yet.
-	int is_exp = 0;
-	// In the end, we will divide r by 10^exp.
-	int exp = 0;
+// 	// A flag telling us whether or not we've seen a decimal point yet.
+// 	int is_exp = 0;
+// 	// In the end, we will divide r by 10^exp.
+// 	int exp = 0;
 
-	if (**ptr == '-') {
-		sgn = -1;
-		(*ptr)++;
-	}
+// 	if (**ptr == '-') {
+// 		sgn = -1;
+// 		(*ptr)++;
+// 	}
 
-	// Loop until we encounter some invalid character. TODO I'm realizing this
-	// (and the parse_int function) could have issues if the CSV files don't end
-	// with a newline.
-	while(1) {
-		if (**ptr == '.') {
-			// We can only have one decimal point, second one is not part of the
-			// number, so break
-			if (is_exp) break;
-			else is_exp = 1;
-		} else if (**ptr >= '0' && **ptr <= '9') {
-			// similar logic to before but also keep track of the exponent
-			r = r * 10 + (**ptr - '0');
-			exp += is_exp;
-		} else {
-			// Unrecognized character
-			break;
-		}
+// 	// Loop until we encounter some invalid character. TODO I'm realizing this
+// 	// (and the parse_int function) could have issues if the CSV files don't end
+// 	// with a newline.
+// 	while(1) {
+// 		if (**ptr == '.') {
+// 			// We can only have one decimal point, second one is not part of the
+// 			// number, so break
+// 			if (is_exp) break;
+// 			else is_exp = 1;
+// 		} else if (**ptr >= '0' && **ptr <= '9') {
+// 			// similar logic to before but also keep track of the exponent
+// 			r = r * 10 + (**ptr - '0');
+// 			exp += is_exp;
+// 		} else {
+// 			// Unrecognized character
+// 			break;
+// 		}
 
-		// Move ptr along
-		(*ptr)++;
-	}
-	// Scale r back down to the correct value. Using this while loop avoids any
-	// cmath shenanigans
-	while(exp--) r /= 10.0;
-	return sgn*r;
-}
+// 		// Move ptr along
+// 		(*ptr)++;
+// 	}
+// 	// Scale r back down to the correct value. Using this while loop avoids any
+// 	// cmath shenanigans
+// 	while(exp--) r /= 10.0;
+// 	return sgn*r;
+// }
 
 /*
  * Parse a row of the CSV file into the given `data` struct, moving ptr to the
@@ -146,7 +147,7 @@ void C_parse_data(char **ptr, data *d, int num_attributes, char *end) {
 	// Parse all of the attributes in this row
 	for(int i = 0; i < num_attributes; i++) {
 		consume_past_char(ptr, end, ',');
-		d->example[i] = C_parse_double(ptr);
+		d->example[i] = parse_double(ptr);
 	}
 
 	// Move ptr to next row

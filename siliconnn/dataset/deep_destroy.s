@@ -35,6 +35,9 @@ _ds_deep_destroy:
 	// pointer back into X0 so its the first argument, and also *store our return
 	// address (in LR) so we know where to jump back to later*.
 	MOV X0, X2                     // Restore the original pointer back to X0
+
+	// TODO this is working for the time being, but I don't think anything is
+	// stopping X2 from being modified during the munmap syscall, as it is volatile
 	MOV X2, LR                     // Save the return address for *this* function
 	BL _ds_destroy                 // Jump to ds_destroy, overwriting LR
 	MOV LR, X2                     // restore the return address for this function
