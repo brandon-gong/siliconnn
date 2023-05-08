@@ -47,10 +47,3 @@ _inc_pointer:
 	STR W1, [X0]
 	RET
 */
-
-.global _parse_data
-.align 2
-
-_parse_data:
-	// TODO, need to learn about alloc stack space for saving volatile registers
-	// and LR before calling other functions

@@ -3,6 +3,7 @@
 extern void consume_past_char(char **ptr, char *end, char c);
 extern int parse_int(char **ptr);
 extern double parse_double(char **ptr);
+extern void parse_data(char **ptr, data *d, int num_attributes, char *end);
 
 /*
  * Just need to munmap the `examples` part of the struct, since we don't want
@@ -139,20 +140,20 @@ extern double parse_double(char **ptr);
  * Parse a row of the CSV file into the given `data` struct, moving ptr to the
  * beginning of the next row.
  */
-void C_parse_data(char **ptr, data *d, int num_attributes, char *end) {
-	// Consume the label first
-	d->label = parse_int(ptr);
-	d->example = (double*) ((long) d + sizeof(data));
+// void C_parse_data(char **ptr, data *d, int num_attributes, char *end) {
+// 	// Consume the label first
+// 	d->label = parse_int(ptr);
+// 	d->example = (double*) ((long) d + sizeof(data));
 
-	// Parse all of the attributes in this row
-	for(int i = 0; i < num_attributes; i++) {
-		consume_past_char(ptr, end, ',');
-		d->example[i] = parse_double(ptr);
-	}
+// 	// Parse all of the attributes in this row
+// 	for(int i = 0; i < num_attributes; i++) {
+// 		consume_past_char(ptr, end, ',');
+// 		d->example[i] = parse_double(ptr);
+// 	}
 
-	// Move ptr to next row
-	consume_past_char(ptr, end, '\n');
-}
+// 	// Move ptr to next row
+// 	consume_past_char(ptr, end, '\n');
+// }
 
 /*
  * Loads a CSV file. The file MUST have a header row, the first column
@@ -228,7 +229,7 @@ void Cds_load(char *filepath, int numrows, int numcols, dataset *ds) {
 	for (int i = 0; i < ds->num_examples; i++) {
 		data *d = (data*) ((long) data_ptr + i * data_size);
 		ds->examples[i] = d;
-		C_parse_data(&parse_ptr, d, ds->num_attributes, end);
+		parse_data(&parse_ptr, d, ds->num_attributes, end);
 	}
 
 	// We are done using the file, so we can unmap it
@@ -312,7 +313,7 @@ void Cds_show(dataset *ds) {
 		// print all the attrs for the example
 		for(int j = 0; j < ds->num_attributes; j++) {
 			write(STDOUT_FILENO, ",", 1);
-			sz = Cdtoa(buf,  ds->examples[i]->example[j], 1);
+			sz = Cdtoa(buf,  ds->examples[i]->example[j], 2);
 			write(STDOUT_FILENO, buf, sz);
 		}
 		write(STDOUT_FILENO, "\n", 1);
