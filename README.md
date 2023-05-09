@@ -3,7 +3,7 @@ Siliconnn is a small yet surprisingly featureful neural network implementation, 
 Included in this repository is the arm64 assembly source as well as the C reference implementation (which I also wrote from scratch, specifically
 for this project) that the assembly code was based upon.
 
-To be clear, siliconnn does _not_ depend on its C reference implementation, nor does it depend on _any_ C standard library functions;
+To be clear, siliconnn does _not_ depend on its C reference implementation, nor does it depend on any C standard library functions[<sup>ish</sup>](##-pure-assembly-or-not);
 no `malloc`, no `atoi`, no `printf`. Everything that is needed is implemented from scratch in assembly.
 
 Both folders have their own README's containing some more specific technical details
@@ -86,3 +86,6 @@ the reference implementation and siliconnn), demonstrating the following feature
 - **Flexibility**. Neural networks with 1 hidden sigmoid layer and 1 output can do a decent job at quite a lot of tasks, but not all. I won't be implementing
   extra layers, or other activation functions, or other architectures (e.g. CNN, RNN) anytime soon, again because this is meant to be more of a teaching/learning
   experience than practically useful.
+  
+## Pure assembly or not?
+
