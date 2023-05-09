@@ -17,6 +17,8 @@
 // data we want to free. After computing the block size and storing in W1,
 // we set X0 to point to the _mmap_ptr, and then we call munmap.
 _ds_deep_destroy:
+	SUB SP, SP, #16
+	STR LR, [SP]                   // // Save the return address for *this* function
 	LDR W1, [X0, #12]              // W1 = ds->num_attributes
 	LSL W1, W1, #3                 // W1 *= 8 (8 bytes per attribute)
 	ADD W1, W1, #4                 // W1 += 4 (example is attributes + int label)
@@ -27,25 +29,21 @@ _ds_deep_destroy:
 	// we will be invoking ds_destroy to cleanup the examples list as well.
 	MOV X2, X0                     // X2 = X0
 	LDR X0, [X0, #16]              // X0 = ds->_mmap_ptr
-	MOV	X16, #73                   // syscall code for munmap is 73
-	SVC	#0x80                      // munmap(X0, W1)
-	CBNZ X0, exit  // If syscall returned nonzero code, exit with error
+	BL _munmap                     // munmap(ds->mmap_ptr, block_size)
+	CBNZ X0, exit                  // If syscall returned nonzero code, exit with error
 	
 	// We now prepare to invoke ds_destroy. We need to put the original dataset
 	// pointer back into X0 so its the first argument, and also *store our return
 	// address (in LR) so we know where to jump back to later*.
 	MOV X0, X2                     // Restore the original pointer back to X0
 
-	// TODO this is working for the time being, but I don't think anything is
-	// stopping X2 from being modified during the munmap syscall, as it is volatile
-	MOV X2, LR                     // Save the return address for *this* function
 	BL _ds_destroy                 // Jump to ds_destroy, overwriting LR
-	MOV LR, X2                     // restore the return address for this function
+	LDR LR, [SP]                   // restore the return address for this function
+	ADD SP, SP, #16
 	RET                            // return
 
 // This is very similar to the exit in ds_destroy; we reach here if something
 // went wrong with munmap, in which we exit with the appropriate exit code (9).
 exit:
-	MOV X0, #9   // X0 = 9
-	MOV X16, #1  // syscall code for exit is 1
-	SVC #0x80    // exit(X0)
+	MOV X0, #9                     // X0 = 9
+	B _exit                        // exit(9)

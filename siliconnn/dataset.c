@@ -195,6 +195,7 @@ void Cds_load(char *filepath, int numrows, int numcols, dataset *ds) {
 	}
 	// Need to obtain the size of the file for mmap
 	struct stat statbuf;
+	
 	int err = fstat(fd, &statbuf);
 	if(err < 0){
 		perror("fstat");

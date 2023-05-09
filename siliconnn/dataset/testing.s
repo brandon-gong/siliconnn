@@ -47,3 +47,41 @@ _inc_pointer:
 	STR W1, [X0]
 	RET
 */
+
+//.global _ds_load
+//.align 2
+
+//_ds_load:
+	// TODO : our first real behemoth function, going to be a serious
+	// challenge to make it work
+
+.global _get_fsize
+.align 2
+
+_get_fsize:
+	SUB SP, SP, #160
+	STR LR, [SP]
+	MOV X1, #0 // O_RDONLY
+	BL _open
+	CMP X0, #0
+	B.LT err_open
+
+	ADD X1, SP, 8
+	BL _fstat
+	//CBNZ X0, err_fstat
+
+	LDR X0, [SP, #104]
+	LDR LR, [SP]
+	
+	ADD SP, SP, #160
+	RET
+
+err_open:
+	MOV X0, #11
+	MOV X16, #1
+	SVC #0x80
+
+err_fstat:
+	//MOV X0, #12
+	MOV X16, #1
+	SVC #0x80

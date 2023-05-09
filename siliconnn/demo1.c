@@ -1,18 +1,26 @@
 #include "nn.h"
+#include <stddef.h>
 
 int main(void) {
   // Cseed();
+
+  extern unsigned long get_fsize(char* fpath);
+
+  //printf("%lu\n", offsetof(struct stat, st_size));
+  
+  // int i = get_fsize("demo1.c");
+  // printf("%lu\n", i);
   
   dataset ds;
   Cds_load("../test_sets/wine.csv", 179, 14, &ds);
   //Cds_load("../test_sets/breast-cancer-wisconsin.csv", 570, 31, &ds);
   //Cds_load("../test_sets/iris.csv", 151, 5, &ds);
-  Cds_show(&ds);
-  // Cds_normalize(&ds);
+  //Cds_show(&ds);
+  Cds_normalize(&ds);
 
-  // nn net;
-  // Cnn_init(&net, 13, 8, 0.05);
-  // Cnn_train(&net, &ds, 25);
+  nn net;
+  Cnn_init(&net, 13, 8, 0.05);
+  Cnn_train(&net, &ds, 25);
 
   ds_deep_destroy(&ds);
 
