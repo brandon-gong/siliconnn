@@ -11,6 +11,7 @@
  * @param X1 the rightmost limit of X0; this is a stop condition in case there
  * 	are no more of c to consume. Without this, we may sigfault
  * @param X2 the character to consume past.
+ * Returns nothing.
  */
 
 .global	_consume_past_char 

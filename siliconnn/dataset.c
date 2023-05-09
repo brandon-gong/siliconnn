@@ -159,87 +159,87 @@ extern void parse_data(char **ptr, data *d, int num_attributes, char *end);
  * Loads a CSV file. The file MUST have a header row, the first column
  * MUST be labels (integers only).
  */
-void Cds_load(char *filepath, int numrows, int numcols, dataset *ds) {
-	// e.g. load_csv("iris.csv", 151, 5, &ds);
-	// need to mmap() 3 things:
-	// - underlying data[]
-	// - the data[] for this particular dataset
-	// - the file we read from (munmapped before the return of this function)
+// void Cds_load(char *filepath, int numrows, int numcols, dataset *ds) {
+// 	// e.g. load_csv("iris.csv", 151, 5, &ds);
+// 	// need to mmap() 3 things:
+// 	// - underlying data[]
+// 	// - the data[] for this particular dataset
+// 	// - the file we read from (munmapped before the return of this function)
 
-	ds->num_examples = numrows - 1;
-	ds->num_attributes = numcols - 1;
+// 	ds->num_examples = numrows - 1;
+// 	ds->num_attributes = numcols - 1;
 
-	// Allocate space for the underlying data. This is a pretty big allocation,
-	// but we only have to do it once; train-test-split reuses underlying data
-	// without moving anything.
+// 	// Allocate space for the underlying data. This is a pretty big allocation,
+// 	// but we only have to do it once; train-test-split reuses underlying data
+// 	// without moving anything.
 
-	// We first compute the total size we need to allocate
-	size_t data_size = sizeof(data) + ds->num_attributes * sizeof(double);
-	size_t block_size = ds->num_examples * data_size;
+// 	// We first compute the total size we need to allocate
+// 	size_t data_size = sizeof(data) + ds->num_attributes * sizeof(double);
+// 	size_t block_size = ds->num_examples * data_size;
 
-	// key flag is MAP_ANONYMOUS, and we need RW access
-	data *data_ptr = mmap(NULL, block_size, PROT_READ | PROT_WRITE,
-		MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-	if(data_ptr == MAP_FAILED) {
-		printf("data_ptr map failed\n");
-		exit(10);
-	}
-	// Save this ptr returned from mmap for freeing later
-	ds->_mmap_ptr = data_ptr;
+// 	// key flag is MAP_ANONYMOUS, and we need RW access
+// 	data *data_ptr = mmap(NULL, block_size, PROT_READ | PROT_WRITE,
+// 		MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+// 	if(data_ptr == MAP_FAILED) {
+// 		printf("data_ptr map failed\n");
+// 		exit(10);
+// 	}
+// 	// Save this ptr returned from mmap for freeing later
+// 	ds->_mmap_ptr = data_ptr;
 
-	// We now open the CSV file for reading. just need read access for this
-	int fd = open(filepath, O_RDONLY);
-	if(fd < 0){
-		perror("open");
-		exit(11);
-	}
-	// Need to obtain the size of the file for mmap
-	struct stat statbuf;
+// 	// We now open the CSV file for reading. just need read access for this
+// 	int fd = open(filepath, O_RDONLY);
+// 	if(fd < 0){
+// 		perror("open");
+// 		exit(11);
+// 	}
+// 	// Need to obtain the size of the file for mmap
+// 	struct stat statbuf;
 	
-	int err = fstat(fd, &statbuf);
-	if(err < 0){
-		perror("fstat");
-		exit(12);
-	}
-	// CSV files may be quite large, so instead of `read` onto the stack into
-	// a huge buffer or something, much simpler to mmap into it
-	char *file_ptr = mmap(NULL, statbuf.st_size, PROT_READ, MAP_SHARED, fd, 0);
-	if(file_ptr == MAP_FAILED) {
-		printf("file_ptr map failed\n");
-		exit(13);
-	}
-	close(fd);
+// 	int err = fstat(fd, &statbuf);
+// 	if(err < 0){
+// 		perror("fstat");
+// 		exit(12);
+// 	}
+// 	// CSV files may be quite large, so instead of `read` onto the stack into
+// 	// a huge buffer or something, much simpler to mmap into it
+// 	char *file_ptr = mmap(NULL, statbuf.st_size, PROT_READ, MAP_SHARED, fd, 0);
+// 	if(file_ptr == MAP_FAILED) {
+// 		printf("file_ptr map failed\n");
+// 		exit(13);
+// 	}
+// 	close(fd);
 
-	// mmap one more time for ds->examples.
-	ds->examples = mmap(NULL, sizeof(data*) * ds->num_examples,
-		PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-	if(ds->examples == MAP_FAILED) {
-		printf("ds->examples map failed\n");
-		exit(14);
-	}
+// 	// mmap one more time for ds->examples.
+// 	ds->examples = mmap(NULL, sizeof(data*) * ds->num_examples,
+// 		PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+// 	if(ds->examples == MAP_FAILED) {
+// 		printf("ds->examples map failed\n");
+// 		exit(14);
+// 	}
 
-	// file_ptr was returned by mmap and points to the first char in the file.
-	// end is the end of the file, computed by start + size
-	char *parse_ptr = file_ptr;
-	char *end = file_ptr + statbuf.st_size;
+// 	// file_ptr was returned by mmap and points to the first char in the file.
+// 	// end is the end of the file, computed by start + size
+// 	char *parse_ptr = file_ptr;
+// 	char *end = file_ptr + statbuf.st_size;
 
-	// skip first line
-	consume_past_char(&parse_ptr, end, '\n');
-	// Parse row-by-row into underlying memory, and also save each index into
-	// ds->examples
-	for (int i = 0; i < ds->num_examples; i++) {
-		data *d = (data*) ((long) data_ptr + i * data_size);
-		ds->examples[i] = d;
-		parse_data(&parse_ptr, d, ds->num_attributes, end);
-	}
+// 	// skip first line
+// 	consume_past_char(&parse_ptr, end, '\n');
+// 	// Parse row-by-row into underlying memory, and also save each index into
+// 	// ds->examples
+// 	for (int i = 0; i < ds->num_examples; i++) {
+// 		data *d = (data*) ((long) data_ptr + i * data_size);
+// 		ds->examples[i] = d;
+// 		parse_data(&parse_ptr, d, ds->num_attributes, end);
+// 	}
 
-	// We are done using the file, so we can unmap it
-	err = munmap(file_ptr, statbuf.st_size);
-	if(err) {
-		perror("munmap");
-		exit(15);
-	}
-}
+// 	// We are done using the file, so we can unmap it
+// 	err = munmap(file_ptr, statbuf.st_size);
+// 	if(err) {
+// 		perror("munmap");
+// 		exit(15);
+// 	}
+// }
 
 // This is a very trivial and direct usage of Fisher-Yates, since all we are
 // doing is moving pointers around, and not touching the underlying data at all

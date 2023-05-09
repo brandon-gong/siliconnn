@@ -8,6 +8,9 @@
  *
  * In the context of the CSV parser, this means typically after calling this the
  * char* will be pointing at a comma or newline character.
+ *
+ * @param X0 a pointer to the char* to update.
+ * Returns the parsed int, in X0.
  */
 
 .global _parse_int

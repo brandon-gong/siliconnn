@@ -10,6 +10,7 @@
  * char* will be pointing at a comma or newline character.
  *
  * @param X0 a pointer to the char* to update
+ * Returns the parsed double, in D0.
  */
 
 .global _parse_double

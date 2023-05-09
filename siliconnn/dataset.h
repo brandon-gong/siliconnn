@@ -89,7 +89,8 @@ extern void ds_deep_destroy(dataset *ds);
  * 	column
  * @param ds the uninitialized ds struct to initialize and load the data into.
  */
-void Cds_load(char *filepath, int numrows, int numcols, dataset *ds);
+extern void ds_load(char* fpath, int numrows, int numcols, dataset *ds);
+//void Cds_load(char *filepath, int numrows, int numcols, dataset *ds);
 
 /**
  * Shuffle a dataset in place, changing the order of its examples, using

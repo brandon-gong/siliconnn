@@ -4,25 +4,26 @@
 int main(void) {
   // Cseed();
 
-  extern unsigned long ds_load(char* fpath, int numrows, int numcols, dataset *ds);
+  
   
   dataset ds;
-  Cds_load("../test_sets/breast-cancer-wisconsin.csv", 570, 31, &ds);
+  //Cds_load("../test_sets/iris.csv", 151, 5, &ds);
+  ds_load("../test_sets/wine.csv", 179, 14, &ds);
   Cds_show(&ds);
-  ds_deep_destroy(&ds);
+  //ds_deep_destroy(&ds);
   
   //dataset ds;
   //Cds_load("../test_sets/wine.csv", 179, 14, &ds);
   //Cds_load("../test_sets/breast-cancer-wisconsin.csv", 570, 31, &ds);
   //Cds_load("../test_sets/iris.csv", 151, 5, &ds);
   //Cds_show(&ds);
-  //Cds_normalize(&ds);
+  Cds_normalize(&ds);
 
-  // nn net;
-  // Cnn_init(&net, 13, 8, 0.05);
-  // Cnn_train(&net, &ds, 25);
+  nn net;
+  Cnn_init(&net, 13, 8, 0.05);
+  Cnn_train(&net, &ds, 25);
 
-  // ds_deep_destroy(&ds);
+  ds_deep_destroy(&ds);
 
   // extern void consume_past_char(char** ptr, char *end, char c);
   // char *s = "qeertw";
