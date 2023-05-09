@@ -3,7 +3,7 @@ Siliconnn is a small yet surprisingly featureful neural network implementation, 
 Included in this repository is the arm64 assembly source as well as the C reference implementation (which I also wrote from scratch, specifically
 for this project) that the assembly code was based upon.
 
-To be clear, siliconnn does _not_ depend on its C reference implementation, nor does it depend on _any_ C standard library functions;
+To be clear, siliconnn does _not_ depend on its C reference implementation, nor does it depend on any C standard library functions[<sup>ish</sup>](#pure-assembly-or-not);
 no `malloc`, no `atoi`, no `printf`. Everything that is needed is implemented from scratch in assembly.
 
 Both folders have their own README's containing some more specific technical details
@@ -21,7 +21,7 @@ the reference implementation and siliconnn), demonstrating the following feature
   - If there is a single syntax error in a cell, it parses as much of the number it can and skips forward to the next cell.
   - If there are more cells in a row than expected, the extraneous cells are skipped.
   - Positive and negative labels are also supported.
-- **Feature normalization**. This is such an important step for most ML tasks, its included as a feature here. Once data is loaded via CSV, features can be normalized,
+- **Feature normalization**. This is such an important step for most ML tasks, it's included as a feature here. Once data is loaded via CSV, features can be normalized,
   which adjusts all attributes to have mean of 0 and standard deviation of 1. This ensures no one particular attribute unfairly outweighs other attributes during
   training.
 - **Shuffling**. Shuffling is also quite a commonly-needed utility; you might want to shuffle your examples before train-test-split (e.g. the Iris dataset comes
@@ -86,3 +86,23 @@ the reference implementation and siliconnn), demonstrating the following feature
 - **Flexibility**. Neural networks with 1 hidden sigmoid layer and 1 output can do a decent job at quite a lot of tasks, but not all. I won't be implementing
   extra layers, or other activation functions, or other architectures (e.g. CNN, RNN) anytime soon, again because this is meant to be more of a teaching/learning
   experience than practically useful.
+  
+## Pure assembly or not?
+As stated previously, siliconnn is implemented in as pure assembly as possible. We do have to end up making some calls `libc` - in particular, system calls.
+It _is_ possible to make some system calls without calling `libc`; for example, here's `munmap`:
+```asm
+MOV	X16, #73
+SVC	#0x80
+```
+In which we move the system call code for `munmap` (73) into the register `X16` and execute the system call.
+
+The problem is that this is not supported by Apple. Apple keeps the codes mostly private and does not document them anywhere, and all attempts I have made
+to search for the codes for `fstat` and `mmap` have come up empty. There is a link [here](https://opensource.apple.com/source/xnu/xnu-1504.3.12/bsd/kern/syscalls.master),
+and some files deep in my local machine with codes, but everything seems outdated and does not work.
+
+Worse, making system calls directly like above makes the code subject to breaking if Apple ever moves things around without telling anyone.
+For these reasons, I have opted to make system calls the way they want me to, simply by calling their C functions with `BL _munmap`, for example.
+For consistency, I do this for system calls even that I know can be called without the C library, such as `write` and `open`. Yes, it's unfortunate
+that we have to rely on the C library at all, but ultimately the logic of my code barely changes (basically all `MOV + SVC` combos are replaced with
+a single `BL`, everything else around it pretty much untouched), and this guarantees the stability of this code in future versions of macOS.
+
