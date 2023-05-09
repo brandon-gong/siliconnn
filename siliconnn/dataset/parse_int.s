@@ -31,12 +31,11 @@ _parse_int:
 	BFC W3, #8, #24   // Same trick as consume_past_char to get **X0
 
 	// Dealing with potential negative sign in beginning of parse
-	CMP W3, #45       // if(**X0 == '-')
-	B.NE while        // if not, skip to the while loop
-	NEG W2, W2        // Flip W2 to negative
-	LDR X3, [X0]      
-	ADD X3, X3, #1
-	STR X3, [X0]      // (*X0)++
+	CMP W3, #45         // if(**X0 == '-')
+	B.NE while          // if not, skip to the while loop
+	NEG W2, W2          // Flip W2 to negative
+	MOV X3, #1
+	STADD X3, [X0]      // (*X0)++
 
 while:
 	LDR X3, [X0]
@@ -46,14 +45,13 @@ while:
 	// This series of two CMPs is used to implement the while loop condition,
 	// (**X0 >= '0' && **X0 <= '9')
 	CMP W3, #48            // Comparing **X0 with '0'
-	B.LT finish           // If its strictly less, its not a digit, exit loop
+	B.LT finish            // If its strictly less, its not a digit, exit loop
 	CMP W3, #57            // Otherwise, proceed to compare **X0 with '9'
-	B.GT finish           // If its strictly greater, again not a digit
+	B.GT finish            // If its strictly greater, again not a digit
 	SUB W3, W3, #48        // W3 = (**X0 - '0')
 	MADD W1, W1, W4, W3    // result = result * 10 + (**X0 - '0')
-	LDR X3, [X0]
-	ADD X3, X3, #1
-	STR X3, [X0]           // (*X0)++
+	MOV X3, #1
+	STADD X3, [X0]         // (*X0)++
 	B while                // go back to condition of while loop
 finish:
 	MUL W0, W1, W2         // Store sign*result in the W0, the return register

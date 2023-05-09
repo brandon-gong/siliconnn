@@ -29,9 +29,8 @@ _consume_past_char:
 	BFC W3, #8, #24
 	CMP W3, W2                  // while(**X0 != X2)
 	B.EQ end_loop               // if they are equal, jump to the end
-	LDR X3, [X0]                // X3 = *X0
-	ADD X3, X3, #1              // X3++
-	STR X3, [X0]                // *X0 = X3
+	MOV X3, #1
+	STADD X3, [X0]      // (*X0)++
 	CMP X3, X1                  // if (*X0 == X1)
 	B.NE _consume_past_char     // If not at end, go back to beginning of loop
 	RET                         // else we hit the end, return
@@ -40,7 +39,6 @@ _consume_past_char:
 // we need to increment *X0 one more time (since we are consuming *past* the
 // given char) and then return
 end_loop:
-	LDR X3, [X0]                // X3 = *X0
-	ADD X3, X3, #1              // X3++
-	STR X3, [X0]                // *X0 = X3
+	MOV X3, #1
+	STADD X3, [X0]              // (*X0)++
 	RET                         // return

@@ -42,10 +42,9 @@ _parse_double:
 	// Dealing with potential negative sign in the beginning. Same as parse_int
 	CMP W4, #45                 // if(**X0 == '-')
 	B.NE while                  // If the first char is not '-', skip to the loop
-	NEG X1, X1                  // Else flip sgn to negative, and..
-	LDR X4, [X0]      
-	ADD X4, X4, #1
-	STR X4, [X0]                // ...increment *X0 to point to the next char.
+	NEG X1, X1                  // Else flip sgn to negative, and..         
+	MOV X4, #1
+	STADD X4, [X0]              // ...increment *X0 to point to the next char.
 
 while:
 	// Get **X0. I stored in X4 instead of W4, probably unnecessarily, but it
@@ -84,9 +83,8 @@ not_decimal_pt:               // This label is only reached if **X0 != '.'
 // two cases (both '.' or digit would lead here). We just increment char* to
 // point at the next char in the string and loop
 endif:
-	LDR X4, [X0]
-	ADD X4, X4, #1
-	STR X4, [X0]                // (*X0)++
+	MOV X4, #1
+	STADD X4, [X0]                // (*X0)++
 	B while                     // Go back to the beginning of the while loop
 
 // This is after the end of the first while loop; we actually have another
