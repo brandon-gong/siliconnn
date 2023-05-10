@@ -67,14 +67,15 @@ int Cdtoa(char *buf, double x, int precision) {
 	return n;
 }
 
-void Cseed() {
-	struct timespec t;
-	// we have to do this instead of just time(NULL)
-	// because clock_gettime is a syscall and time is stdlib
-	if(clock_gettime(CLOCK_REALTIME, &t) == -1) {
-		perror("clock_gettime");
-		exit(1);
-	}
-	// Seed the randomizer with system time
-	srand(t.tv_sec);
-}
+// void Cseed() {
+// 	struct timespec t;
+// 	sizeof(struct timespec);
+// 	// we have to do this instead of just time(NULL)
+// 	// because clock_gettime is a syscall and time is stdlib
+// 	if(clock_gettime(CLOCK_REALTIME, &t) == -1) {
+// 		perror("clock_gettime");
+// 		exit(16);
+// 	}
+// 	// Seed the randomizer with system time
+// 	srand(t.tv_sec);
+// }
