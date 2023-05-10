@@ -170,7 +170,7 @@ void Cnn_train(nn *net, dataset *ds, int num_epochs) {
 		write(STDOUT_FILENO, buf, sz);
 		write(STDOUT_FILENO, "\n", 1);
 
-		Cds_shuffle(ds);
+		ds_shuffle(ds);
 	}
 }
 

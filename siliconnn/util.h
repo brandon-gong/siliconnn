@@ -38,6 +38,8 @@ int Cdtoa(char *buf, double x, int precision);
  * Seed the randomizer. Only in the C implementation, going to have to figure
  * out something else for asm.
  */
-void Cseed();
+extern void seed();
+extern long rand_ul();
+extern double rand01();
 
 #endif

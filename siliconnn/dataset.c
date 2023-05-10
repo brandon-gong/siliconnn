@@ -243,16 +243,16 @@ extern void parse_data(char **ptr, data *d, int num_attributes, char *end);
 
 // This is a very trivial and direct usage of Fisher-Yates, since all we are
 // doing is moving pointers around, and not touching the underlying data at all
-void Cds_shuffle(dataset *ds) {
-	int i, j;
-	data *tmp;
-	for (i = ds->num_examples - 1; i > 0; i--) {
-		j = rand() % (i + 1);
-		tmp = ds->examples[j];
-		ds->examples[j] = ds->examples[i];
-		ds->examples[i] = tmp;
-	}
-}
+// void Cds_shuffle(dataset *ds) {
+// 	int i, j;
+// 	data *tmp;
+// 	for (i = ds->num_examples - 1; i > 0; i--) {
+// 		j = rand() % (i + 1);
+// 		tmp = ds->examples[j];
+// 		ds->examples[j] = ds->examples[i];
+// 		ds->examples[i] = tmp;
+// 	}
+// }
 
 // This function uses two mmaps, one for each of train_set and test_set.
 // Most of the other work is just initializing the various fields of train_set

@@ -98,7 +98,8 @@ extern void ds_load(char* fpath, int numrows, int numcols, dataset *ds);
  * 
  * @param ds the dataset to shuffle.
  */
-void Cds_shuffle(dataset *ds);
+extern void ds_shuffle(dataset *ds);
+//void Cds_shuffle(dataset *ds);
 
 /**
  * Split a dataset into training and testing sets. This does not shuffle the
