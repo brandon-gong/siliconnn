@@ -1,3 +1,5 @@
 # TODO remove this siliconnn/ folder is cleaned of c and h
 siliconnn/*.c linguist-vendored
 siliconnn/*.h linguist-vendored
+
+*.s linguist-language=Unix-Assembly
