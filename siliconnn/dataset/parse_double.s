@@ -93,7 +93,7 @@ endif:
 // the exponent we stored.
 end_while:
 	CBZ X3, finish              // If exp is 0, no need to divide by 10 anymore
-	SUB X3, X3, 1               // otherwise decrement exp and do
+	SUB X3, X3, #1               // otherwise decrement exp and do
 	FDIV D0, D0, D2             // D0 = D0 / 10
 	B end_while
 

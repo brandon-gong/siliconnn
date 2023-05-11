@@ -4,10 +4,17 @@ int main(void) {
   seed();
   
   dataset ds;
-  //Cds_load("../test_sets/iris.csv", 151, 5, &ds);
-  ds_load("../test_sets/wine.csv", 179, 14, &ds);
+  ds_load("../test_sets/iris.csv", 151, 5, &ds);
+  //ds_load("../test_sets/wine.csv", 179, 14, &ds);
   ds_shuffle(&ds);
-  Cds_show(&ds);
+  //Cds_show(&ds);
+  dataset tr, te;
+  ds_train_test_split(&ds, &tr, &te, 0.2);
+  printf("----------- TEST SET ---------------\n");
+  Cds_show(&te);
+  printf("----------- TRAIN SET --------------\n");
+  Cds_show(&tr);
+  
   //ds_deep_destroy(&ds);
   
   //dataset ds;
@@ -15,12 +22,14 @@ int main(void) {
   //Cds_load("../test_sets/breast-cancer-wisconsin.csv", 570, 31, &ds);
   //Cds_load("../test_sets/iris.csv", 151, 5, &ds);
   //Cds_show(&ds);
-  Cds_normalize(&ds);
+  Cds_normalize(&tr);
 
   nn net;
-  Cnn_init(&net, 13, 8, 0.05);
-  Cnn_train(&net, &ds, 25);
+  Cnn_init(&net, 4, 2, 0.05);
+  Cnn_train(&net, &tr, 25);
 
+  ds_destroy(&tr);
+  ds_destroy(&te);
   ds_deep_destroy(&ds);
 
   // extern void consume_past_char(char** ptr, char *end, char c);

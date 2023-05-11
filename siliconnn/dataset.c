@@ -257,46 +257,46 @@ extern void parse_data(char **ptr, data *d, int num_attributes, char *end);
 // This function uses two mmaps, one for each of train_set and test_set.
 // Most of the other work is just initializing the various fields of train_set
 // and test_set
-void Cds_train_test_split(
-	dataset *original,
-	dataset *train_set,
-	dataset *test_set,
-	double test_ratio) {
+// void Cds_train_test_split(
+// 	dataset *original,
+// 	dataset *train_set,
+// 	dataset *test_set,
+// 	double test_ratio) {
 
-	// Clamp test_ratio to [0, 1].
-	if (test_ratio < 0) test_ratio = 0;
-	if (test_ratio > 1) test_ratio = 1;
+// 	// Clamp test_ratio to [0, 1].
+// 	if (test_ratio < 0) test_ratio = 0;
+// 	if (test_ratio > 1) test_ratio = 1;
 
-	// Compute number of examples in each set
-	int test_size = (int) (test_ratio * original->num_examples);
-	int train_size = original->num_examples - test_size;
+// 	// Compute number of examples in each set
+// 	int test_size = (int) (test_ratio * original->num_examples);
+// 	int train_size = original->num_examples - test_size;
 
-	// Initialize all of the fields of both structs to something reasonable
-	test_set->num_examples = test_size;
-	train_set->num_examples = train_size;
-	test_set->num_attributes = original->num_attributes;
-	train_set->num_attributes = original->num_attributes;
-	// It doesn't really make sense to set it to original's _mmap_ptr, because
-	// it doesn't make sense to deep delete these sets. We can't recover the
-	// total number of pages to unmap from the data in these structs.
-	// TODO not really sure what to do here.
-	test_set->_mmap_ptr = NULL;
-	train_set->_mmap_ptr = NULL;
+// 	// Initialize all of the fields of both structs to something reasonable
+// 	test_set->num_examples = test_size;
+// 	train_set->num_examples = train_size;
+// 	test_set->num_attributes = original->num_attributes;
+// 	train_set->num_attributes = original->num_attributes;
+// 	// It doesn't really make sense to set it to original's _mmap_ptr, because
+// 	// it doesn't make sense to deep delete these sets. We can't recover the
+// 	// total number of pages to unmap from the data in these structs.
+// 	// TODO not really sure what to do here.
+// 	test_set->_mmap_ptr = NULL;
+// 	train_set->_mmap_ptr = NULL;
 
-	test_set->examples = mmap(NULL, sizeof(data*) * test_size,
-		PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-	train_set->examples = mmap(NULL, sizeof(data*) * train_size,
-		PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+// 	test_set->examples = mmap(NULL, sizeof(data*) * test_size,
+// 		PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+// 	train_set->examples = mmap(NULL, sizeof(data*) * train_size,
+// 		PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
 	
-	// Just copy the first n examples into the test set, and the remaining
-	// examples into the train set.
-	for(int i = 0; i < test_size; i++) {
-		test_set->examples[i] = original->examples[i];
-	}
-	for(int i = test_size; i < original->num_examples; i++) {
-		train_set->examples[i - test_size] = original->examples[i];
-	}
-}
+// 	// Just copy the first n examples into the test set, and the remaining
+// 	// examples into the train set.
+// 	for(int i = 0; i < test_size; i++) {
+// 		test_set->examples[i] = original->examples[i];
+// 	}
+// 	for(int i = test_size; i < original->num_examples; i++) {
+// 		train_set->examples[i - test_size] = original->examples[i];
+// 	}
+// }
 
 void Cds_show(dataset *ds) {
 	char buf[32];

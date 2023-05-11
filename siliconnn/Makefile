@@ -3,7 +3,7 @@ CFLAGS=-Wall
 
 all: demo1
 
-demo1: demo1.o dataset.o nn.o util.o testing.o ds_destroy.o ds_deep_destroy.o ds_consume_past_char.o ds_parse_int.o ds_parse_double.o ds_parse_data.o ds_load.o ut_random.o ds_shuffle.o
+demo1: demo1.o dataset.o nn.o util.o testing.o ds_destroy.o ds_deep_destroy.o ds_consume_past_char.o ds_parse_int.o ds_parse_double.o ds_parse_data.o ds_load.o ut_random.o ds_shuffle.o ds_train_test_split.o
 	$(CC) $(CFLAGS) $^ -o demo1
 
 dataset.o: dataset.c dataset.h 
@@ -41,6 +41,9 @@ ds_load.o: dataset/load.s
 
 ds_shuffle.o: dataset/shuffle.s
 	as -arch arm64 -o ds_shuffle.o dataset/shuffle.s
+
+ds_train_test_split.o: dataset/train_test_split.s
+	as -arch arm64 -o ds_train_test_split.o dataset/train_test_split.s
 
 ut_random.o: util/random.s
 	as -arch arm64 -o ut_random.o util/random.s

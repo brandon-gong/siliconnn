@@ -113,8 +113,11 @@ extern void ds_shuffle(dataset *ds);
  * @param test_ratio The proportion of the original set to turn into testing
  * 	examples.
  */
-void Cds_train_test_split(dataset *original, dataset *train_set,
+	extern void ds_train_test_split(dataset *original, dataset *train_set,
 	dataset *test_set, double test_ratio);
+// void Cds_train_test_split(dataset *original, dataset *train_set,
+// 	dataset *test_set, double test_ratio);
+
 
 /**
  * Prints a dataset to the terminal, for debugging purposes.
