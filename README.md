@@ -1,4 +1,8 @@
+![example network](nn.png)
+<p align="center"><i>A network created with siliconnn for classifying the <a href="https://archive.ics.uci.edu/ml/datasets/iris">Iris dataset</a>.</i></p>
+
 # (silicon)nn
+
 Siliconnn is a small yet surprisingly featureful neural network implementation, written in pure ARM64 (AArch64) assembly for Apple Silicon.
 Included in this repository is the arm64 assembly source as well as the C reference implementation (which I also wrote from scratch, specifically
 for this project) that the assembly code was based upon.
