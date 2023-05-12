@@ -88,7 +88,8 @@ the reference implementation and siliconnn), demonstrating the following feature
   experience than practically useful.
   
 ## Pure assembly or not?
-As stated previously, siliconnn is implemented in as pure assembly as possible. We do have to end up making some calls `libc` - in particular, system calls.
+As stated previously, siliconnn is implemented in as pure assembly as possible. We do have to end up making some calls `libc` - in particular, system calls and
+`exp`.
 It _is_ possible to make some system calls without calling `libc`; for example, here's `munmap`:
 ```asm
 MOV	X16, #73
@@ -106,3 +107,7 @@ For consistency, I do this for system calls even that I know can be called witho
 that we have to rely on the C library at all, but ultimately the logic of my code barely changes (basically all `MOV + SVC` combos are replaced with
 a single `BL`, everything else around it pretty much untouched), and this guarantees the stability of this code in future versions of macOS.
 
+And I cannot figure out how to get `exp` to work. I did find a page in the ARM Aarch64 documentation for [`FEXPA`](https://developer.arm.com/documentation/ddi0596/2021-12/SVE-Instructions/FEXPA--Floating-point-exponential-accelerator-), which appears to be exponential-function related, but whenever I try to
+use this function I get a `SIGILL`. And I cannot dig into how the standard library does it, because Apple has hidden the implementation so well
+that the .dylib doesn't even exist in the filesystem. So after hitting my head against the wall over this for about two days, I've realized it's
+just not worth it and have opted to just call `exp` from `math.h`. If you know how to do it otherwise, open an issue!
