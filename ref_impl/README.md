@@ -14,10 +14,10 @@ In order to make this work, I had to make sure that every standard library
 function call made by siliconnn (anything included by `#include <...>`) is backed
 by either a straight arm64 instruction, or is a system call. For example, we
 don't have `sqrt()` or `exp()` from the standard library, but thankfully ARM
-gives us `FSQRT` and `FEXPA`.
+gives us `FSQRT`.
 
 This is generally
-fine, save for three key features we are missing from C:
+fine, save for four key features we are missing from C:
 
 - We don't have access to `malloc`. We get by this quite
 easily by using `mmap` instead; while `mmap` is potentially slower, it doesn't
@@ -34,6 +34,10 @@ includes its own `random` module with an implementation of the XorShift64*
 pseudo-random number generator. There is no corresponding reference implementation
 to this here (the code listing is provided on [Wikipedia](https://en.wikipedia.org/wiki/Xorshift#xorshift*)),
 but the reference implementation for seeding is followed.
+- No `exp()`. I also cannot figure out how to do the exponential function in Assembly.
+The documentation mentions a `FEXPA` instruction, but whenever I try to use it I
+get a `SIGILL`. And Apple has made it literally impossible to figure out what they
+do on their end. Thus I am just using the standard library `exp` for now.
 
 The code is written to avoid recursion and avoid returning structs or
 anything complicated like that. I also do not make use of preprocessing facilities
