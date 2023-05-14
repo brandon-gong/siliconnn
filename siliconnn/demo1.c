@@ -2,18 +2,24 @@
 
 int main(void) {
   seed();
+
+  
+  char buf[30] = "fuctest";
+  int sz = itoa(buf, 100032);
+  write(STDOUT_FILENO, buf, sz);
+  //printf("%d\ns:%s\n", sz, buf);
   
   dataset ds;
-  ds_load("../test_sets/iris.csv", 151, 5, &ds);
-  //ds_load("../test_sets/wine.csv", 179, 14, &ds);
-  ds_shuffle(&ds);
-  //Cds_show(&ds);
-  dataset tr, te;
-  ds_train_test_split(&ds, &tr, &te, 0.2);
-  printf("----------- TEST SET ---------------\n");
-  Cds_show(&te);
-  printf("----------- TRAIN SET --------------\n");
-  Cds_show(&tr);
+  // ds_load("../test_sets/iris.csv", 151, 5, &ds);
+  ds_load("../test_sets/wine.csv", 179, 14, &ds);
+  // ds_shuffle(&ds);
+  Cds_show(&ds);
+  // dataset tr, te;
+  // ds_train_test_split(&ds, &tr, &te, 0.2);
+  // printf("----------- TEST SET ---------------\n");
+  // Cds_show(&te);
+  // printf("----------- TRAIN SET --------------\n");
+  // Cds_show(&tr);
   
   //ds_deep_destroy(&ds);
   
@@ -22,15 +28,15 @@ int main(void) {
   //Cds_load("../test_sets/breast-cancer-wisconsin.csv", 570, 31, &ds);
   //Cds_load("../test_sets/iris.csv", 151, 5, &ds);
   //Cds_show(&ds);
-  Cds_normalize(&tr);
+  // Cds_normalize(&tr);
 
-  nn net;
-  Cnn_init(&net, 4, 2, 0.05);
-  Cnn_train(&net, &tr, 25);
+  // nn net;
+  // Cnn_init(&net, 4, 2, 0.05);
+  // Cnn_train(&net, &tr, 25);
 
-  ds_destroy(&tr);
-  ds_destroy(&te);
-  ds_deep_destroy(&ds);
+  // ds_destroy(&tr);
+  // ds_destroy(&te);
+  // ds_deep_destroy(&ds);
 
   // extern void consume_past_char(char** ptr, char *end, char c);
   // char *s = "qeertw";

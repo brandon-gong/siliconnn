@@ -306,10 +306,10 @@ void Cds_show(dataset *ds) {
 	// number of examples in the set that we expect
 	for(int i = 0; i < ds->num_examples; i++) {
 		// Print the row number and label
-		sz = Citoa(buf, i);
+		sz = itoa(buf, i);
 		write(STDOUT_FILENO, buf, sz);
 		write(STDOUT_FILENO, " | ", 3);
-		sz = Citoa(buf, ds->examples[i]->label);
+		sz = itoa(buf, ds->examples[i]->label);
 		write(STDOUT_FILENO, buf, sz);
 		// print all the attrs for the example
 		for(int j = 0; j < ds->num_attributes; j++) {

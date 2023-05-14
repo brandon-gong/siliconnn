@@ -25,8 +25,8 @@ int main(void) {
   // Init a network with 8 hidden neurons and a learning rate of 0.05. Then
   // train the network on the training set for 25 epochs.
   nn net;
-  nn_init(&net, 4, 8, 0.05);
-  nn_train(&net, &train, 25);
+  nn_init(&net, 13, 18, 0.01);
+  nn_train(&net, &train, 100);
 
   // Show average loss on the test set.
   write(STDOUT_FILENO, "Avg test loss: ", 15);

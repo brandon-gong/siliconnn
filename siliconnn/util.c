@@ -5,30 +5,30 @@
  * This can very easily be expanded to support negatives at any point, I just
  * want to reduce the workload of rewriting this in asm later
  */
-int Citoa(char *buf, int x) {
-	// n holds the index of the buffer into which we are writing
-	int n = 0;
-	// Special case, x=0
-	if (x == 0) {
-		buf[0] = '0';
-		return 1;
-	}
+// int Citoa(char *buf, int x) {
+// 	// n holds the index of the buffer into which we are writing
+// 	int n = 0;
+// 	// Special case, x=0
+// 	if (x == 0) {
+// 		buf[0] = '0';
+// 		return 1;
+// 	}
 
-	while (x > 0) {
-		buf[n] = (x % 10) + '0';
-		x /= 10;
-		n++;
-	}
+// 	while (x > 0) {
+// 		buf[n] = (x % 10) + '0';
+// 		x /= 10;
+// 		n++;
+// 	}
 
-	// Reverse the digits of the buffer up to the nth character, since we put the
-	// ones digit in buf[0], tens digit in buf[1], etc.
-	for(int i = 0; i < n / 2; i++) {
-		char tmp = buf[i];
-		buf[i]  = buf[n - i - 1];
-		buf[n - i - 1] = tmp;
-	}
-	return n;
-}
+// 	// Reverse the digits of the buffer up to the nth character, since we put the
+// 	// ones digit in buf[0], tens digit in buf[1], etc.
+// 	for(int i = 0; i < n / 2; i++) {
+// 		char tmp = buf[i];
+// 		buf[i]  = buf[n - i - 1];
+// 		buf[n - i - 1] = tmp;
+// 	}
+// 	return n;
+// }
 
 /*
  * Printing doubles is notoriously harder than it looks, but I am not too 
@@ -48,7 +48,7 @@ int Cdtoa(char *buf, double x, int precision) {
 		buf[0] = '-';
 		x *= -1;
 	}
-	int n = Citoa(buf + isneg, (int) x);
+	int n = itoa(buf + isneg, (int) x);
 	n += isneg;
 	// Add the decimal point and increment n
 	buf[n++] = '.';

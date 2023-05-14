@@ -22,7 +22,8 @@
  * @param x the int to stringify
  * @returns the length of the stringified int
  */
-int Citoa(char *buf, int x);
+extern int itoa(char *buf, int x);
+//int Citoa(char *buf, int x);
 
 /**
  * Converts a double value, positive or negative, into a string, putting it in

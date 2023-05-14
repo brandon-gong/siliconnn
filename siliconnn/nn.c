@@ -163,7 +163,7 @@ void Cnn_train(nn *net, dataset *ds, int num_epochs) {
 		// printf in the asm world
 		double loss = Cnn_average_loss(net, ds);
 		write(STDOUT_FILENO, "Epoch ", 6);
-		sz = Citoa(buf, i);
+		sz = itoa(buf, i);
 		write(STDOUT_FILENO, buf, sz);
 		write(STDOUT_FILENO, " | Loss: ", 9);
 		sz = Cdtoa(buf, loss, 10);
