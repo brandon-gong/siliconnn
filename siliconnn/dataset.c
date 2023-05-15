@@ -298,28 +298,28 @@ extern void parse_data(char **ptr, data *d, int num_attributes, char *end);
 // 	}
 // }
 
-void Cds_show(dataset *ds) {
-	char buf[32];
-	int sz;
+// void Cds_show(dataset *ds) {
+// 	char buf[32];
+// 	int sz;
 
-	// Also print out row numbers, helpful for making sure we are getting the
-	// number of examples in the set that we expect
-	for(int i = 0; i < ds->num_examples; i++) {
-		// Print the row number and label
-		sz = itoa(buf, i);
-		write(STDOUT_FILENO, buf, sz);
-		write(STDOUT_FILENO, " | ", 3);
-		sz = itoa(buf, ds->examples[i]->label);
-		write(STDOUT_FILENO, buf, sz);
-		// print all the attrs for the example
-		for(int j = 0; j < ds->num_attributes; j++) {
-			write(STDOUT_FILENO, ",", 1);
-			sz = dtoa(buf,  ds->examples[i]->example[j], 2);
-			write(STDOUT_FILENO, buf, sz);
-		}
-		write(STDOUT_FILENO, "\n", 1);
-	}
-}
+// 	// Also print out row numbers, helpful for making sure we are getting the
+// 	// number of examples in the set that we expect
+// 	for(int i = 0; i < ds->num_examples; i++) {
+// 		// Print the row number and label
+// 		sz = itoa(buf, i);
+// 		write(STDOUT_FILENO, buf, sz);
+// 		write(STDOUT_FILENO, " | ", 3);
+// 		sz = itoa(buf, ds->examples[i]->label);
+// 		write(STDOUT_FILENO, buf, sz);
+// 		// print all the attrs for the example
+// 		for(int j = 0; j < ds->num_attributes; j++) {
+// 			write(STDOUT_FILENO, ",", 1);
+// 			sz = dtoa(buf,  ds->examples[i]->example[j], 2);
+// 			write(STDOUT_FILENO, buf, sz);
+// 		}
+// 		write(STDOUT_FILENO, "\n", 1);
+// 	}
+// }
 
 void Cds_normalize(dataset *ds) {
 	// We iterate over attributes, finding mean and std. Have to go in three passes.

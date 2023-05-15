@@ -11,6 +11,7 @@
  * 	testing examples
  * @param D0 The proportion of the original set to turn into testing
  * 	examples.
+ * Returns nothing.
  */
 
 .global _ds_train_test_split

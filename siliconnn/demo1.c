@@ -2,16 +2,14 @@
 
 int main(void) {
   seed();
-  
-  char buf[30];
-  double test = -2.2;
-  double testp = 1;
-  int sz = dtoa(buf, test, testp);
-  write(STDOUT_FILENO, buf, sz);
-  printf("\n");
+
   //printf("%d\ns:%s\n", sz, buf);
   
-  // dataset ds;
+  dataset ds;
+  ds_load("../test_sets/wine.csv", 179, 14, &ds);
+  Cds_normalize(&ds);
+  ds_show(&ds); 
+
   // // ds_load("../test_sets/iris.csv", 151, 5, &ds);
   // ds_load("../test_sets/wine.csv", 179, 14, &ds);
   // // ds_shuffle(&ds);

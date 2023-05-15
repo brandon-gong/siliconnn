@@ -130,7 +130,7 @@ extern void ds_shuffle(dataset *ds);
  * Prints a dataset to the terminal, for debugging purposes.
  * @param ds the dataset to print.
  */
-void Cds_show(dataset *ds);
+extern void ds_show(dataset *ds);
 
 /**
  * Normalizes all attributes in the dataset to have mean of 0 and standard
