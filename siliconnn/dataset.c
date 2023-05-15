@@ -314,7 +314,7 @@ void Cds_show(dataset *ds) {
 		// print all the attrs for the example
 		for(int j = 0; j < ds->num_attributes; j++) {
 			write(STDOUT_FILENO, ",", 1);
-			sz = Cdtoa(buf,  ds->examples[i]->example[j], 2);
+			sz = dtoa(buf,  ds->examples[i]->example[j], 2);
 			write(STDOUT_FILENO, buf, sz);
 		}
 		write(STDOUT_FILENO, "\n", 1);

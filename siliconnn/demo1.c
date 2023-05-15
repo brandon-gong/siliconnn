@@ -2,18 +2,20 @@
 
 int main(void) {
   seed();
-
   
-  char buf[30] = "fuctest";
-  int sz = itoa(buf, 100032);
+  char buf[30];
+  double test = -2.2;
+  double testp = 1;
+  int sz = dtoa(buf, test, testp);
   write(STDOUT_FILENO, buf, sz);
+  printf("\n");
   //printf("%d\ns:%s\n", sz, buf);
   
-  dataset ds;
-  // ds_load("../test_sets/iris.csv", 151, 5, &ds);
-  ds_load("../test_sets/wine.csv", 179, 14, &ds);
-  // ds_shuffle(&ds);
-  Cds_show(&ds);
+  // dataset ds;
+  // // ds_load("../test_sets/iris.csv", 151, 5, &ds);
+  // ds_load("../test_sets/wine.csv", 179, 14, &ds);
+  // // ds_shuffle(&ds);
+  // Cds_show(&ds);
   // dataset tr, te;
   // ds_train_test_split(&ds, &tr, &te, 0.2);
   // printf("----------- TEST SET ---------------\n");

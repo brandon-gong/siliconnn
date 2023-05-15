@@ -166,7 +166,7 @@ void Cnn_train(nn *net, dataset *ds, int num_epochs) {
 		sz = itoa(buf, i);
 		write(STDOUT_FILENO, buf, sz);
 		write(STDOUT_FILENO, " | Loss: ", 9);
-		sz = Cdtoa(buf, loss, 10);
+		sz = dtoa(buf, loss, 10);
 		write(STDOUT_FILENO, buf, sz);
 		write(STDOUT_FILENO, "\n", 1);
 

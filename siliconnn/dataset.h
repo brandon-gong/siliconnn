@@ -3,10 +3,17 @@
 
 #include <fcntl.h>
 #include <unistd.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <math.h>
-#include "util.h"
+
+extern int itoa(char *buf, int x);
+extern int dtoa(char *buf, double x, int precision);
+extern void seed();
+extern long rand_ul();
+extern double rand01();
 
 /**
  * Defines a single labeled example that can be used in training or testing.
