@@ -3,7 +3,7 @@ CFLAGS=-Wall
 
 all: demo1
 
-demo1: demo1.o nn.o testing.o ds_destroy.o ds_deep_destroy.o ds_consume_past_char.o ds_parse_int.o ds_parse_double.o ds_parse_data.o ds_load.o ut_random.o ds_shuffle.o ds_train_test_split.o ut_itoa.o ut_dtoa.o ds_show.o ds_normalize.o
+demo1: demo1.o nn.o testing.o ds_destroy.o ds_deep_destroy.o ds_consume_past_char.o ds_parse_int.o ds_parse_double.o ds_parse_data.o ds_load.o ut_random.o ds_shuffle.o ds_train_test_split.o ut_itoa.o ut_dtoa.o ds_show.o ds_normalize.o nn_formula.o
 	$(CC) $(CFLAGS) $^ -o demo1
 
 nn.o: nn.c nn.h
@@ -53,6 +53,9 @@ ut_itoa.o: util/itoa.s
 
 ut_dtoa.o: util/dtoa.s
 	as -arch arm64 -o ut_dtoa.o util/dtoa.s
+
+nn_formula.o: nn/formula.s
+	as -arch arm64 -o nn_formula.o nn/formula.s
 
 .PHONY: clean
 clean:

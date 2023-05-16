@@ -3,67 +3,36 @@
 int main(void) {
   seed();
 
-  //printf("%d\ns:%s\n", sz, buf);
-  
-  //extern double get_example_ji(dataset *ds, int j, int i);
-  
+  // Loading dataset from file, and shuffling all the examples.
   dataset ds;
-  ds_load("../test_sets/breast-cancer-wisconsin.csv", 570, 31, &ds);
-  //ds_load("../test_sets/wine.csv", 179, 14, &ds);
+  ds_load("../test_sets/wine.csv", 179, 14, &ds);
   ds_normalize(&ds);
-  ds_show(&ds);
-  //printf("%f\n", get_example_ji(&ds, 177, 5));
+  ds_shuffle(&ds);
 
-  // // ds_load("../test_sets/iris.csv", 151, 5, &ds);
-  // ds_load("../test_sets/wine.csv", 179, 14, &ds);
-  // // ds_shuffle(&ds);
-  // Cds_show(&ds);
-  // dataset tr, te;
-  // ds_train_test_split(&ds, &tr, &te, 0.2);
-  // printf("----------- TEST SET ---------------\n");
-  // Cds_show(&te);
-  // printf("----------- TRAIN SET --------------\n");
-  // Cds_show(&tr);
-  
-  //ds_deep_destroy(&ds);
-  
-  //dataset ds;
-  //Cds_load("../test_sets/wine.csv", 179, 14, &ds);
-  //Cds_load("../test_sets/breast-cancer-wisconsin.csv", 570, 31, &ds);
-  //Cds_load("../test_sets/iris.csv", 151, 5, &ds);
-  //Cds_show(&ds);
-  // Cds_normalize(&tr);
+  // Train-test split the examples into a test set (20% of the data) and a
+  // training set (80% of the data). Print them out for debug purposes.
+  dataset train, test;
+  ds_train_test_split(&ds, &train, &test, 0.2);
+  write(STDOUT_FILENO, "\n----------TRAIN SET-----------\n", 32);
+  ds_show(&train);
+  write(STDOUT_FILENO, "\n----------TEST SET-----------\n", 31);
+  ds_show(&test);
 
-  // nn net;
-  // Cnn_init(&net, 4, 2, 0.05);
-  // Cnn_train(&net, &tr, 25);
+  // Init a network with 8 hidden neurons and a learning rate of 0.05. Then
+  // train the network on the training set for 25 epochs.
+  nn net;
+  Cnn_init(&net, 13, 18, 0.01);
+  Cnn_train(&net, &train, 100);
 
-  // ds_destroy(&tr);
-  // ds_destroy(&te);
-  // ds_deep_destroy(&ds);
+  // Show average loss on the test set.
+  write(STDOUT_FILENO, "Avg test loss: ", 15);
+  char buf[32];
+  int sz = dtoa(buf, Cnn_average_loss(&net, &test), 10);
+  write(STDOUT_FILENO, buf, sz);
 
-  // extern void consume_past_char(char** ptr, char *end, char c);
-  // char *s = "qeertw";
-  // char *end = s + 6;
-  // consume_past_char(&s, end, 'w');
-  // printf("sruvi%s\n", s);
-
-  
-  // char* test = "001,qwer4\n";
-  // double x = parse_double(&test);
-  // printf("%f\n%s\n", x, test);
-
-
-  // extern double rand01();
-  // extern void seed();
-  // extern  long rand_ul();
-  // seed();
-  // for(int i = 0; i < 100; i++) {
-  //   printf("%f\n", rand01());
-  // }
-  // for(int i = 0; i < 100; i++) {
-  //   printf("%ld\n", rand_ul() % 3);
-  // }
-
-  
+  // cleanup
+  Cnn_destroy(&net);
+  ds_destroy(&train);
+  ds_destroy(&test);
+  ds_deep_destroy(&ds);
 }

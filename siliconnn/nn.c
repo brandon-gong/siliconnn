@@ -1,9 +1,12 @@
 #include "nn.h"
 
+extern double sigmoid(double x);
+extern size_t compute_mem_reqs(int input_size, int hidden_size);
+
 // old friend sigmoid
-double C_sigmoid(double x) {
-	return 1.0 / (1.0 + exp(-x));
-}
+// double C_sigmoid(double x) {
+// 	return 1.0 / (1.0 + exp(-x));
+// }
 
 // This formula is used fairly often throughout, so just decided to pull it into
 // a helper function. It is derived by
@@ -13,9 +16,9 @@ double C_sigmoid(double x) {
 // = hidden_size * (input_size + 3)
 // and then we multiply the result by sizeof(double) to get the total memory
 // requirement in bytes (for mmap)
-size_t C_compute_mem_reqs(int input_size, int hidden_size) {
-	return sizeof(double) * hidden_size * (input_size + 3);
-}
+// size_t C_compute_mem_reqs(int input_size, int hidden_size) {
+// 	return sizeof(double) * hidden_size * (input_size + 3);
+// }
 
 // Zero out all of the outputs in the network before each forward pass
 void C_zero_outputs(nn *net) {
@@ -28,21 +31,21 @@ void C_zero_outputs(nn *net) {
 // Helper fn to generate a random double between 0 and 1. I don't know if this
 // is uniformly distributed, but if it isn't, I'm not about to implement a
 // uniformly distributed RNG
-double C_random_01() {
-	return ((double) rand() / RAND_MAX);
-}
+// double C_random_01() {
+// 	return ((double) rand() / RAND_MAX);
+// }
 
 // Helper function called by nn_init to randomize all of the weights of a
 // network. Necessary to establish independence between all of the neurons
 void C_random_weights(nn *net) {
 	for(int i = 0; i < net->hidden_size; i++) {
 		for(int j = 0; j < net->input_size; j++) {
-			net->w01[j * net->hidden_size + i] = C_random_01();
+			net->w01[j * net->hidden_size + i] = rand01();
 		}
-		net->b1[i] = C_random_01();
-		net->w12[i] = C_random_01();
+		net->b1[i] = rand01();
+		net->w12[i] = rand01();
 	}
-	net->b2 = C_random_01();
+	net->b2 = rand01();
 }
 
 /*
@@ -55,7 +58,7 @@ void Cnn_init(nn *net, int input_size, int hidden_size, double learning_rate) {
 	net->input_size = input_size;
 	net->hidden_size = hidden_size;
 	net->learning_rate = learning_rate;
-	int mem_size = C_compute_mem_reqs(input_size, hidden_size);
+	int mem_size = compute_mem_reqs(input_size, hidden_size);
 	// mmap the required space. w01 will point to the beginning of the block,
 	// but keep in mind that its not the whole block, just the first input*hidden
 	// slots
@@ -76,7 +79,7 @@ void Cnn_init(nn *net, int input_size, int hidden_size, double learning_rate) {
 
 // Very simple, just deallocate the pages starting at w01
 void Cnn_destroy(nn *net) {
-	int mem_size = C_compute_mem_reqs(net->input_size, net->hidden_size);
+	int mem_size = compute_mem_reqs(net->input_size, net->hidden_size);
 	int err = munmap(net->w01, mem_size);
 	if(err) {
 		perror("nn_destroy munmap");
@@ -93,7 +96,7 @@ double Cnn_forward(nn *net, double *x) {
 		}
 	}
 	for(int i = 0; i < net->hidden_size; i++) {
-		net->o1[i] = C_sigmoid(net->o1[i] + net->b1[i]);
+		net->o1[i] = sigmoid(net->o1[i] + net->b1[i]);
 	}
 	for(int i = 0; i < net->hidden_size; i++) {
 		net->o2 += net->o1[i] * net->w12[i];
@@ -192,7 +195,7 @@ void Cnn_save(nn *net, char *filepath) {
 	write(fd, &net->hidden_size, sizeof(int));
 	write(fd, &net->learning_rate, sizeof(double));
 	write(fd, &net->b2, sizeof(double));
-	int mem_size = C_compute_mem_reqs(net->input_size, net->hidden_size);
+	int mem_size = compute_mem_reqs(net->input_size, net->hidden_size);
 	write(fd, net->w01, mem_size);
 	close(fd);
 }
