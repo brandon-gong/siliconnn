@@ -1,7 +1,37 @@
 #ifndef _NN_H_
 #define _NN_H_
 
-#include "dataset.h"
+#include <fcntl.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <sys/mman.h>
+#include <sys/stat.h>
+#include <math.h>
+
+extern int itoa(char *buf, int x);
+extern int dtoa(char *buf, double x, int precision);
+extern void seed();
+extern long rand_ul();
+extern double rand01();
+
+typedef struct data { int label; double* example; } data;
+typedef struct dataset {
+	data **examples;
+	int num_examples;
+	int num_attributes;
+	data *_mmap_ptr;
+} dataset;
+
+extern void ds_destroy(dataset *ds);
+extern void ds_deep_destroy(dataset *ds);
+extern void ds_load(char* fpath, int numrows, int numcols, dataset *ds);
+extern void ds_shuffle(dataset *ds);
+extern void ds_train_test_split(dataset *original, dataset *train_set,
+	dataset *test_set, double test_ratio);
+extern void ds_show(dataset *ds);
+extern void ds_normalize(dataset *ds);
+
 
 /**
  * This is the actual neural network implementation. We obviously can't implement

@@ -5,10 +5,14 @@ int main(void) {
 
   //printf("%d\ns:%s\n", sz, buf);
   
+  //extern double get_example_ji(dataset *ds, int j, int i);
+  
   dataset ds;
-  ds_load("../test_sets/wine.csv", 179, 14, &ds);
-  Cds_normalize(&ds);
-  ds_show(&ds); 
+  ds_load("../test_sets/breast-cancer-wisconsin.csv", 570, 31, &ds);
+  //ds_load("../test_sets/wine.csv", 179, 14, &ds);
+  ds_normalize(&ds);
+  ds_show(&ds);
+  //printf("%f\n", get_example_ji(&ds, 177, 5));
 
   // // ds_load("../test_sets/iris.csv", 151, 5, &ds);
   // ds_load("../test_sets/wine.csv", 179, 14, &ds);
