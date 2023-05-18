@@ -2,6 +2,8 @@
 
 extern double sigmoid(double x);
 extern size_t compute_mem_reqs(int input_size, int hidden_size);
+extern void zero_outputs(nn *net);
+extern void random_weights(nn *net);
 
 // old friend sigmoid
 // double C_sigmoid(double x) {
@@ -21,12 +23,12 @@ extern size_t compute_mem_reqs(int input_size, int hidden_size);
 // }
 
 // Zero out all of the outputs in the network before each forward pass
-void C_zero_outputs(nn *net) {
-	net->o2 = 0.0;
-	for(int i = 0; i < net->hidden_size; i++) {
-		net->o1[i] = 0.0;
-	}
-}
+// void C_zero_outputs(nn *net) {
+// 	net->o2 = 0.0;
+// 	for(int i = 0; i < net->hidden_size; i++) {
+// 		net->o1[i] = 0.0;
+// 	}
+// }
 
 // Helper fn to generate a random double between 0 and 1. I don't know if this
 // is uniformly distributed, but if it isn't, I'm not about to implement a
@@ -37,16 +39,16 @@ void C_zero_outputs(nn *net) {
 
 // Helper function called by nn_init to randomize all of the weights of a
 // network. Necessary to establish independence between all of the neurons
-void C_random_weights(nn *net) {
-	for(int i = 0; i < net->hidden_size; i++) {
-		for(int j = 0; j < net->input_size; j++) {
-			net->w01[j * net->hidden_size + i] = rand01();
-		}
-		net->b1[i] = rand01();
-		net->w12[i] = rand01();
-	}
-	net->b2 = rand01();
-}
+// void C_random_weights(nn *net) {
+// 	for(int i = 0; i < net->hidden_size; i++) {
+// 		for(int j = 0; j < net->input_size; j++) {
+// 			net->w01[j * net->hidden_size + i] = rand01();
+// 		}
+// 		net->b1[i] = rand01();
+// 		net->w12[i] = rand01();
+// 	}
+// 	net->b2 = rand01();
+// }
 
 /*
  * This function has to take care of setting all of the appropriate fields of
@@ -73,8 +75,8 @@ void Cnn_init(nn *net, int input_size, int hidden_size, double learning_rate) {
 	net->o1 = net->b1 + hidden_size;
 	net->w12 = net->o1 + hidden_size;
 	// initialize everything
-	C_zero_outputs(net);
-	C_random_weights(net);
+	zero_outputs(net);
+	random_weights(net);
 }
 
 // Very simple, just deallocate the pages starting at w01
@@ -89,7 +91,7 @@ void Cnn_destroy(nn *net) {
 
 // Compute a forward pass through the network, pretty much how you would expect.
 double Cnn_forward(nn *net, double *x) {
-	C_zero_outputs(net);
+	zero_outputs(net);
 	for(int i = 0; i < net->input_size; i++) {
 		for(int j = 0; j < net->hidden_size; j++) {
 			net->o1[j] += x[i] * net->w01[i*net->hidden_size + j];
