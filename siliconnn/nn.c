@@ -56,28 +56,28 @@ extern void random_weights(nn *net);
  * weights and biases, and initializing everything to expected values
  * (randomizing the weights and biases, zeroing out activations)
  */
-void Cnn_init(nn *net, int input_size, int hidden_size, double learning_rate) {
-	net->input_size = input_size;
-	net->hidden_size = hidden_size;
-	net->learning_rate = learning_rate;
-	int mem_size = compute_mem_reqs(input_size, hidden_size);
-	// mmap the required space. w01 will point to the beginning of the block,
-	// but keep in mind that its not the whole block, just the first input*hidden
-	// slots
-	net->w01 = mmap(NULL, mem_size, PROT_READ | PROT_WRITE,
-		MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-	if(net->w01 == MAP_FAILED) {
-		printf("nn_init map failed\n");
-		exit(1);
-	}
-	// set up the other pointers into the block
-	net->b1 = net->w01 + input_size * hidden_size;
-	net->o1 = net->b1 + hidden_size;
-	net->w12 = net->o1 + hidden_size;
-	// initialize everything
-	zero_outputs(net);
-	random_weights(net);
-}
+// void Cnn_init(nn *net, int input_size, int hidden_size, double learning_rate) {
+// 	net->input_size = input_size;
+// 	net->hidden_size = hidden_size;
+// 	net->learning_rate = learning_rate;
+// 	int mem_size = compute_mem_reqs(input_size, hidden_size);
+// 	// mmap the required space. w01 will point to the beginning of the block,
+// 	// but keep in mind that its not the whole block, just the first input*hidden
+// 	// slots
+// 	net->w01 = mmap(NULL, mem_size, PROT_READ | PROT_WRITE,
+// 		MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+// 	if(net->w01 == MAP_FAILED) {
+// 		printf("nn_init map failed\n");
+// 		exit(1);
+// 	}
+// 	// set up the other pointers into the block
+// 	net->b1 = net->w01 + input_size * hidden_size;
+// 	net->o1 = net->b1 + hidden_size;
+// 	net->w12 = net->o1 + hidden_size;
+// 	// initialize everything
+// 	zero_outputs(net);
+// 	random_weights(net);
+// }
 
 // Very simple, just deallocate the pages starting at w01
 void Cnn_destroy(nn *net) {
@@ -238,7 +238,7 @@ void Cnn_load(nn *net, char *filepath) {
 	double learning_rate = *((double*) (file_ptr + 2 * sizeof(int)));
 	double b2 = *((double*) (file_ptr + 2 * sizeof(int) + sizeof(double)));
 	double* w01 = (double*) (file_ptr + 2 * sizeof(int) + 2 * sizeof(double));
-	Cnn_init(net, input_size, hidden_size, learning_rate);
+	nn_init(net, input_size, hidden_size, learning_rate);
 	net->b2 = b2;
 	int mem_size = hidden_size * (input_size + 3);
 	// copy over weights and biases from file

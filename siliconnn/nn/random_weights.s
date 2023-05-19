@@ -1,6 +1,5 @@
 /**
- * Reference implementation:
-   https://github.com/brandon-gong/siliconnn/blob/main/ref_impl/nn.c#L37
+ * Reference implementation: https://github.com/brandon-gong/siliconnn/blob/main/ref_impl/nn.c#L37
  *
  * Helper function called by nn_init to randomize all of the weights and biases
  * of a network. Necessary to establish independence between all of the neurons.

@@ -85,7 +85,8 @@ typedef struct nn {
  * @param learning_rate the learning rate. Should be strictly positive
  * 	(and probably small) value.
  */
-void Cnn_init(nn *net, int input_size, int hidden_size, double learning_rate);
+//void Cnn_init(nn *net, int input_size, int hidden_size, double learning_rate);
+extern void nn_init(nn *net, int input_size, int hidden_size, double learning_rate);
 
 /**
  * Frees resources associated with this nn (just the big w01+b1+o1+w12 array)
