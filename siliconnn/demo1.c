@@ -34,7 +34,7 @@ int main(void) {
   write(STDOUT_FILENO, buf, sz);
 
   // cleanup
-  Cnn_destroy(&net);
+  nn_destroy(&net);
   ds_destroy(&train);
   ds_destroy(&test);
   ds_deep_destroy(&ds);
@@ -48,5 +48,4 @@ int main(void) {
   // nn_init(&net, 4, 2, 0.05);
   // Cnn_train(&net, &ds, 25);
   // ds_destroy(&ds);
-  // Cnn_destroy(&net);
 }

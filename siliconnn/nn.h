@@ -91,7 +91,8 @@ extern void nn_init(nn *net, int input_size, int hidden_size, double learning_ra
 /**
  * Frees resources associated with this nn (just the big w01+b1+o1+w12 array)
  */
-void Cnn_destroy(nn *net);
+// void Cnn_destroy(nn *net);
+extern void nn_destroy(nn *net);
 
 /**
  * Given an example, generate a prediction by doing a forward pass through the

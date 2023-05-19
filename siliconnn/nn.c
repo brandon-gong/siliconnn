@@ -80,14 +80,14 @@ extern void random_weights(nn *net);
 // }
 
 // Very simple, just deallocate the pages starting at w01
-void Cnn_destroy(nn *net) {
-	int mem_size = compute_mem_reqs(net->input_size, net->hidden_size);
-	int err = munmap(net->w01, mem_size);
-	if(err) {
-		perror("nn_destroy munmap");
-		exit(2);
-	}
-}
+// void Cnn_destroy(nn *net) {
+// 	int mem_size = compute_mem_reqs(net->input_size, net->hidden_size);
+// 	int err = munmap(net->w01, mem_size);
+// 	if(err) {
+// 		perror("nn_destroy munmap");
+// 		exit(2);
+// 	}
+// }
 
 // Compute a forward pass through the network, pretty much how you would expect.
 double Cnn_forward(nn *net, double *x) {
