@@ -31,7 +31,7 @@ _consume_past_char:
 	CMP W3, W2                  // while(**X0 != X2)
 	B.EQ end_loop               // if they are equal, jump to the end
 	MOV X3, #1
-	STADD X3, [X0]      // (*X0)++
+	STADD X3, [X0]              // (*X0)++
 	CMP X3, X1                  // if (*X0 == X1)
 	B.NE _consume_past_char     // If not at end, go back to beginning of loop
 	RET                         // else we hit the end, return

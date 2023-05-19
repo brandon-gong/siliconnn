@@ -30,8 +30,7 @@ for:
 	CMP X1, X2               // i < net->hidden_size?
 	B.GE endfor              // if not, exit the for loop
 	LSL X4, X1, #3           // X4 = i * sizeof(double)
-	ADD X4, X4, X3           // X4 is now the location of net->o1[i]
-	STR D0, [X4]             // store 0.0 into net->o1[i]
+	STR D0, [X3, X4]         // store 0.0 into net->o1[i]
 	ADD X1, X1, #1           // i++;
 	B for                    // loop back to the for condition
 	

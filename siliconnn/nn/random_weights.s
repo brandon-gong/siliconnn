@@ -57,8 +57,7 @@ for_input:                     // Expects j to be in X1 at start of loop
 	LSL X0, X0, #3               // multiply X0 by sizeof(double)
 	LDR X2, [SP, #8]             // Get the net pointer from stack one more time
 	LDR X2, [X2, #16]            // this time to load the location of net->w01[0]
-	ADD X0, X0, X2               // Add this offset to X0
-	STR D0, [X0]                 // net->w01[j * net->hidden_size + i] = rand01();
+	STR D0, [X2, X0]             // net->w01[j * net->hidden_size + i] = rand01();
 
 	ADD X1, X1, #1               // increment j, the inner loop counter
 	STR X1, [SP, #24]            // store incremented value back into the stack
@@ -76,13 +75,11 @@ end_for_input:
 
 	LDR X2, [SP, #8]             // Want to store first random value in b1[i]
 	LDR X2, [X2, #24]            // offsetof(nn, b1) is 24 bytes. X2 points at b1[0]
-	ADD X2, X0, X2               // add offset X0, so now X2 points at b1[i]
-	STR D2, [X2]                 // store the first RNG value into b1[i]
+	STR D2, [X2, X0]             // store the first RNG value into b1[i]
 
 	LDR X2, [SP, #8]             // Similar process, except this time we load...
 	LDR X2, [X2, #40]            // the address of w12[0] into X2 instead of b1
-	ADD X2, X0, X2               // Same thing as before, adding the same offset X0
-	STR D0, [X2]                 // so we can store the second RNG value in w12[i]
+	STR D0, [X2, X0]             // so we can store the second RNG value in w12[i]
 
 	ADD X1, X1, #1               // increment i, the outer loop counter
 	STR X1, [SP, #16]            // store the incremented value back in the stack

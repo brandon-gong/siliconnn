@@ -87,8 +87,7 @@ for:
 	LDR X1, [X1, #8]                  // X1 = *(data->example)
 	// So now X1 points to the space for the first element in the double[].
 	LSL X2, X0, #3                    // X2 = i * sizeof(double) = i << 3
-	ADD X1, X1, X2                    // Now X1 points to the i-th element
-	STR D0, [X1]                      // Store our parsed double at X1
+	STR D0, [X1, X2]                  // Store our parsed double at X1[i]
 	ADD X0, X0, #1                    // i++
 	B for                             // Loop back to the condition
 

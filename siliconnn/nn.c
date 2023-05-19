@@ -4,6 +4,7 @@ extern double sigmoid(double x);
 extern size_t compute_mem_reqs(int input_size, int hidden_size);
 extern void zero_outputs(nn *net);
 extern void random_weights(nn *net);
+extern double nn_forward(nn *net, double *x);
 
 // old friend sigmoid
 // double C_sigmoid(double x) {
