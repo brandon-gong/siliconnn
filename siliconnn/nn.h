@@ -103,7 +103,8 @@ extern void nn_destroy(nn *net);
  * @param x the example
  * @return the network's final prediction
  */
-double Cnn_forward(nn *net, double *x);
+//double Cnn_forward(nn *net, double *x);
+extern double nn_forward(nn *net, double *x);
 
 /**
  * Given an example and its true label, update the network weights via 
@@ -115,7 +116,8 @@ double Cnn_forward(nn *net, double *x);
  * @param x the example that was just run through the net with nn_forward
  * @param y the example's true label
  */
-void Cnn_backward(nn *net, double *x, int y);
+//void Cnn_backward(nn *net, double *x, int y);
+extern void nn_backward(nn *net, double *x, int y);
 
 /**
  * Trains a neural network on the given dataset for the specified number of
@@ -140,7 +142,8 @@ void Cnn_train(nn *net, dataset *ds, int num_epochs);
  * @param ds the dataset to compute average loss for. This will call nn_forward
  * 	on each example in ds.
  */
-double Cnn_average_loss(nn *net, dataset *ds);
+// double Cnn_average_loss(nn *net, dataset *ds);
+extern double nn_average_loss(nn *net, dataset *ds);
 
 /**
  * Saves the network to a file at the given filepath.

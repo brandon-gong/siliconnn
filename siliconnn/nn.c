@@ -4,7 +4,7 @@ extern double sigmoid(double x);
 extern size_t compute_mem_reqs(int input_size, int hidden_size);
 extern void zero_outputs(nn *net);
 extern void random_weights(nn *net);
-extern double nn_forward(nn *net, double *x);
+
 
 // old friend sigmoid
 // double C_sigmoid(double x) {
@@ -91,22 +91,22 @@ extern double nn_forward(nn *net, double *x);
 // }
 
 // Compute a forward pass through the network, pretty much how you would expect.
-double Cnn_forward(nn *net, double *x) {
-	zero_outputs(net);
-	for(int i = 0; i < net->input_size; i++) {
-		for(int j = 0; j < net->hidden_size; j++) {
-			net->o1[j] += x[i] * net->w01[i*net->hidden_size + j];
-		}
-	}
-	for(int i = 0; i < net->hidden_size; i++) {
-		net->o1[i] = sigmoid(net->o1[i] + net->b1[i]);
-	}
-	for(int i = 0; i < net->hidden_size; i++) {
-		net->o2 += net->o1[i] * net->w12[i];
-	}
-	net->o2 += net->b2;
-	return net->o2;
-}
+// double Cnn_forward(nn *net, double *x) {
+// 	zero_outputs(net);
+// 	for(int i = 0; i < net->input_size; i++) {
+// 		for(int j = 0; j < net->hidden_size; j++) {
+// 			net->o1[j] += x[i] * net->w01[i*net->hidden_size + j];
+// 		}
+// 	}
+// 	for(int i = 0; i < net->hidden_size; i++) {
+// 		net->o1[i] = sigmoid(net->o1[i] + net->b1[i]);
+// 	}
+// 	for(int i = 0; i < net->hidden_size; i++) {
+// 		net->o2 += net->o1[i] * net->w12[i];
+// 	}
+// 	net->o2 += net->b2;
+// 	return net->o2;
+// }
 
 /*
  * This is where things get a little gnarly, especially because we have to work
@@ -121,35 +121,36 @@ double Cnn_forward(nn *net, double *x) {
  * grad_b1_i = 2 * (o2 - y) * w12_i * o1_i * (1 - o1_i) (sigmoid derivative here)
  * grad_w01_ji = 2 * (o2 - y) * w12_i * o1_i * (1 - o1_i) * x_i
  */
-void Cnn_backward(nn *net, double *x, int y) {
-	// update b2
-	double grad_b2 = 2 * (net->o2 - y);
-	net->b2 -= net->learning_rate * grad_b2;
+// void Cnn_backward(nn *net, double *x, int y) {
+// 	// update b2
+// 	double grad_b2 = 2 * (net->o2 - y);
+// 	net->b2 -= net->learning_rate * grad_b2;
 
-	// update everything else
-	for(int i = 0; i < net->hidden_size; i++) {
-		double grad_w12_i = grad_b2 * net->o1[i];
-		double grad_b1_i = grad_b2 * net->w12[i] * net->o1[i] * (1 - net->o1[i]);
-		net->w12[i] -= net->learning_rate * grad_w12_i;
-		net->b1[i] -= net->learning_rate * grad_b1_i;
-		for(int j = 0; j < net->input_size; j++) {
-			double grad_w01_ji = x[j] * grad_b1_i;
-			net->w01[j*net->hidden_size + i] -= net->learning_rate * grad_w01_ji;
-		}
-	}
-}
+// 	// update everything else
+// 	for(int i = 0; i < net->hidden_size; i++) {
+// 		double grad_w12_i = grad_b2 * net->o1[i];
+// 		//double grad_b1_i = grad_b2 * net->w12[i] * net->o1[i] * (1 - net->o1[i]);
+// 		double grad_b1_i = grad_w12_i * net->w12[i] * (1 - net->o1[i]);
+// 		net->w12[i] -= net->learning_rate * grad_w12_i;
+// 		net->b1[i] -= net->learning_rate * grad_b1_i;
+// 		for(int j = 0; j < net->input_size; j++) {
+// 			double grad_w01_ji = x[j] * grad_b1_i;
+// 			net->w01[j*net->hidden_size + i] -= net->learning_rate * grad_w01_ji;
+// 		}
+// 	}
+// }
 
 // Pretty much straight up the formula. Accumulate the squared error in
 // total_loss and divide by num_examples at the end to get avg loss
-double Cnn_average_loss(nn *net, dataset *ds) {
-	double total_loss = 0;
-	for(int i = 0; i < ds->num_examples; i++) {
-		double pred = Cnn_forward(net, ds->examples[i]->example);
-		double err = ds->examples[i]->label - pred;
-		total_loss += err*err;
-	}
-	return total_loss / ds->num_examples;
-}
+// double Cnn_average_loss(nn *net, dataset *ds) {
+// 	double total_loss = 0;
+// 	for(int i = 0; i < ds->num_examples; i++) {
+// 		double pred = nn_forward(net, ds->examples[i]->example);
+// 		double err = ds->examples[i]->label - pred;
+// 		total_loss += err*err;
+// 	}
+// 	return total_loss / ds->num_examples;
+// }
 
 // For each epoch, do forward and backward pass with all the examples in the
 // training set, and then log useful data to the terminal. Then shuffle the
@@ -161,13 +162,13 @@ void Cnn_train(nn *net, dataset *ds, int num_epochs) {
 
 	for(int i = 0; i < num_epochs; i++) {
 		for(int j = 0; j < ds->num_examples; j++) {
-			Cnn_forward(net, ds->examples[j]->example);
-			Cnn_backward(net, ds->examples[j]->example, ds->examples[j]->label);
+			nn_forward(net, ds->examples[j]->example);
+			nn_backward(net, ds->examples[j]->example, ds->examples[j]->label);
 		}
 
 		// We have to do this convoluted stuff with write because we don't have
 		// printf in the asm world
-		double loss = Cnn_average_loss(net, ds);
+		double loss = nn_average_loss(net, ds);
 		write(STDOUT_FILENO, "Epoch ", 6);
 		sz = itoa(buf, i);
 		write(STDOUT_FILENO, buf, sz);
