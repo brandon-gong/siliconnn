@@ -155,31 +155,31 @@ extern void random_weights(nn *net);
 // For each epoch, do forward and backward pass with all the examples in the
 // training set, and then log useful data to the terminal. Then shuffle the
 // data and go to the next epoch.
-void Cnn_train(nn *net, dataset *ds, int num_epochs) {
-	// These two variables are just for logging (see next few lines)
-	char buf[32];
-	int sz;
+// void Cnn_train(nn *net, dataset *ds, int num_epochs) {
+// 	// These two variables are just for logging (see next few lines)
+// 	char buf[32];
+// 	int sz;
 
-	for(int i = 0; i < num_epochs; i++) {
-		for(int j = 0; j < ds->num_examples; j++) {
-			nn_forward(net, ds->examples[j]->example);
-			nn_backward(net, ds->examples[j]->example, ds->examples[j]->label);
-		}
+// 	for(int i = 0; i < num_epochs; i++) {
+// 		for(int j = 0; j < ds->num_examples; j++) {
+// 			nn_forward(net, ds->examples[j]->example);
+// 			nn_backward(net, ds->examples[j]->example, ds->examples[j]->label);
+// 		}
 
-		// We have to do this convoluted stuff with write because we don't have
-		// printf in the asm world
-		double loss = nn_average_loss(net, ds);
-		write(STDOUT_FILENO, "Epoch ", 6);
-		sz = itoa(buf, i);
-		write(STDOUT_FILENO, buf, sz);
-		write(STDOUT_FILENO, " | Loss: ", 9);
-		sz = dtoa(buf, loss, 10);
-		write(STDOUT_FILENO, buf, sz);
-		write(STDOUT_FILENO, "\n", 1);
+// 		// We have to do this convoluted stuff with write because we don't have
+// 		// printf in the asm world
+// 		double loss = nn_average_loss(net, ds);
+// 		write(STDOUT_FILENO, "Epoch ", 6);
+// 		sz = itoa(buf, i);
+// 		write(STDOUT_FILENO, buf, sz);
+// 		write(STDOUT_FILENO, " | Loss: ", 9);
+// 		sz = dtoa(buf, loss, 10);
+// 		write(STDOUT_FILENO, buf, sz);
+// 		write(STDOUT_FILENO, "\n", 1);
 
-		ds_shuffle(ds);
-	}
-}
+// 		ds_shuffle(ds);
+// 	}
+// }
 
 /**
  * Save the network into a file at the given filepath. The serialization format

@@ -129,7 +129,8 @@ extern void nn_backward(nn *net, double *x, int y);
  * @param ds the dataset to train on
  * @param num_epochs the number of epochs to train for
  */
-void Cnn_train(nn *net, dataset *ds, int num_epochs);
+// void Cnn_train(nn *net, dataset *ds, int num_epochs);
+extern void nn_train(nn *net, dataset *ds, int num_epochs);
 
 /**
  * Computes the average L2 loss of the network. If n is the number of examples,
