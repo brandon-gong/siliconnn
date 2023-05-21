@@ -189,20 +189,21 @@ extern void random_weights(nn *net);
  * next 8 bytes stores the layer 2 bias, and then we just copy in our big
  * block from memory that has the rest of our weights and biases in it.
  */
-void Cnn_save(nn *net, char *filepath) {
-	int fd = open(filepath, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU);
-	if (fd < 0) {
-		perror("nn_save");
-		exit(3);            
-	}
-	write(fd, &net->input_size, sizeof(int));
-	write(fd, &net->hidden_size, sizeof(int));
-	write(fd, &net->learning_rate, sizeof(double));
-	write(fd, &net->b2, sizeof(double));
-	int mem_size = compute_mem_reqs(net->input_size, net->hidden_size);
-	write(fd, net->w01, mem_size);
-	close(fd);
-}
+// void Cnn_save(nn *net, char *filepath) {
+// 	int fd = open(filepath, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU);
+// 	if (fd < 0) {
+// 		perror("nn_save");
+// 		exit(3);            
+// 	}
+// 	// write(fd, &net->input_size, sizeof(int));
+// 	// write(fd, &net->hidden_size, sizeof(int));
+// 	// write(fd, &net->learning_rate, sizeof(double));
+// 	write(fd, net, 16);
+// 	write(fd, &net->b2, sizeof(double));
+// 	int mem_size = compute_mem_reqs(net->input_size, net->hidden_size);
+// 	write(fd, net->w01, mem_size);
+// 	close(fd);
+// }
 
 /**
  * The corresponding operation to save. The simplicity of the serialization

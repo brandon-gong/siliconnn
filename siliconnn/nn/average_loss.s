@@ -10,6 +10,7 @@
  * @param X0 the network to compute average loss on
  * @param X1 the dataset to compute average loss for. This will call nn_forward
  * 	on each example in ds.
+ * @returns the mean squared error, in D0.
  */
 
 .global _nn_average_loss

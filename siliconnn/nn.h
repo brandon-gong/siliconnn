@@ -149,7 +149,8 @@ extern double nn_average_loss(nn *net, dataset *ds);
 /**
  * Saves the network to a file at the given filepath.
  */
-void Cnn_save(nn *net, char *filepath);
+extern void nn_save(nn *net, char *filepath);
+// void Cnn_save(nn *net, char *filepath);
 
 /**
  * Loads a network from the given filepath into net. You can use this and

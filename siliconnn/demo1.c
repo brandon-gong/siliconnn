@@ -2,53 +2,41 @@
 #include <stddef.h>
 
 int main(void) {
-  //seed();
-
-  //printf("%lu\n", offsetof(nn, b2));
-
-  // Loading dataset from file, and shuffling all the examples.
-  // dataset ds;
-  // ds_load("../test_sets/wine.csv", 179, 14, &ds);
-  // ds_normalize(&ds);
-  // ds_shuffle(&ds);
-
-  // // Train-test split the examples into a test set (20% of the data) and a
-  // // training set (80% of the data). Print them out for debug purposes.
-  // dataset train, test;
-  // ds_train_test_split(&ds, &train, &test, 0.2);
-  // write(STDOUT_FILENO, "\n----------TRAIN SET-----------\n", 32);
-  // ds_show(&train);
-  // write(STDOUT_FILENO, "\n----------TEST SET-----------\n", 31);
-  // ds_show(&test);
-
-  // Init a network with 8 hidden neurons and a learning rate of 0.05. Then
-  // train the network on the training set for 25 epochs.
-  
-
-  // nn net;
-  // nn_init(&net, 13, 21, 0.01);
-  // nn_train(&net, &train, 500);
-
-  // //Show average loss on the test set.
-  // write(STDOUT_FILENO, "Avg test loss: ", 15);
-  // char buf[32];
-  // int sz = dtoa(buf, nn_average_loss(&net, &test), 10);
-  // write(STDOUT_FILENO, buf, sz);
-
-  // // // cleanup
-  // nn_destroy(&net);
-  // ds_destroy(&train);
-  // ds_destroy(&test);
-  // ds_deep_destroy(&ds);
-
+  // Load the Iris dataset.
   dataset ds;
   ds_load("../test_sets/iris.csv", 151, 5, &ds);
-  
 
   // Initialize a network with 2 hidden neurons and train for 25 epochs.
-  nn net;
-  nn_init(&net, 4, 2, 0.05);
-  nn_train(&net, &ds, 25);
+  nn n1, n2;
+  nn_init(&n1, 4, 2, 0.05);
+  nn_train(&n1, &ds, 25);
+
+  // Save the trained result to demo.nn
+  nn_save(&n1, "demo.nn");
+
+  // cleanup
+  nn_destroy(&n1);
   ds_deep_destroy(&ds);
-  nn_destroy(&net);
+
+
+  double examples_to_predict[3][4] = {
+    {5.8, 4.0, 1.2, 0.2},
+    {5.5, 2.4, 3.8, 1.1},
+    {7.9, 3.8, 6.4, 2.0}
+  };
+
+  // Initialize a network with 2 hidden neurons and train for 25 epochs.
+  Cnn_load(&n2, "demo.nn");
+
+  write(STDOUT_FILENO, "Predictions:\n", 13);
+  char buf[32];
+  int sz;
+  for(int i = 0; i < 3; i++) {
+    sz = dtoa(buf, nn_forward(&n2, examples_to_predict[i]), 10);
+    write(STDOUT_FILENO, buf, sz);
+    write(STDOUT_FILENO, "\n", 1);
+  }
+
+  // cleanup
+  nn_destroy(&n2);
 }

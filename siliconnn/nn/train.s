@@ -9,6 +9,7 @@
  * @param net the network to train
  * @param ds the dataset to train on
  * @param num_epochs the number of epochs to train for
+ * Returns nothing.
  */
 .global _nn_train
 .align 2

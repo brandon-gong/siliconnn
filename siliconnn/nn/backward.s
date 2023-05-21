@@ -28,6 +28,7 @@
  * @param X0 the network to update
  * @param X1 the example that was just run through the net with nn_forward
  * @param X2 the example's true label
+ * Returns nothing.
  */
 
 .global _nn_backward
