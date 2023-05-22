@@ -470,31 +470,10 @@ close to the true values for each example.
   <summary>Example output</summary>
   
   ```
-  Epoch 0 | Loss: 1.6004945877
-  Epoch 1 | Loss: 0.0931686257
-  Epoch 2 | Loss: 0.0545873305
-  Epoch 3 | Loss: 0.0668135236
-  Epoch 4 | Loss: 0.1112969564
-  Epoch 5 | Loss: 0.3379020180
-  Epoch 6 | Loss: 0.0439549523
-  Epoch 7 | Loss: 0.0388685917
-  Epoch 8 | Loss: 0.0635569788
-  Epoch 9 | Loss: 0.0828348869
-  Epoch 10 | Loss: 0.0820943264
-  Epoch 11 | Loss: 0.0795910859
-  Epoch 12 | Loss: 0.1993147314
-  Epoch 13 | Loss: 0.0393402223
-  Epoch 14 | Loss: 0.0358872263
-  Epoch 15 | Loss: 0.0388186547
-  Epoch 16 | Loss: 0.0349244460
-  Epoch 17 | Loss: 0.0502932192
-  Epoch 18 | Loss: 0.0463453639
-  Epoch 19 | Loss: 0.0530413016
-  Epoch 20 | Loss: 0.0336110164
-  Epoch 21 | Loss: 0.0333378566
-  Epoch 22 | Loss: 0.0406205655
-  Epoch 23 | Loss: 0.0429201775
-  Epoch 24 | Loss: 0.0338577588
+  Predictions:
+  0.0531142360
+  0.9446105566
+  1.7613263579
   ```
 </details>
 
