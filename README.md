@@ -28,6 +28,10 @@ each will generate three demos (the demos behave identically between the
 reference implementation and siliconnn). See [here](#demos) for details on and
 example outputs for each demo.
 
+Nowhere will you see me say this project has any practical use cases; it's
+purely for educational/entertainment purposes :). Enjoy!
+
+
 ## Features
 - **CSV parsing**. You can load training data in through CSV files. There are
   some limitations; only numerical values are allowed, labels must be integers,
@@ -99,21 +103,23 @@ example outputs for each demo.
   
   | code | crash reason |
   |------|--------------|
-  | 1 | nn_init mmap failed |
-  | 2 | nn_destroy munmap failed |
-  | 3 | nn_save failed to open file for writing |
-  | 4 | nn_load failed to open file for reading |
-  | 5 | nn_load failed to get file size info (fstat) |
-  | 6 | nn_load mmap failed |
-  | 7 | nn_load munmap failed |
-  | 8 | ds_destroy munmap failed |
-  | 9 | ds_deep_destroy munmap failed |
-  | 10 | ds_load mmap failed for data block |
-  | 11 | ds_load failed to open file for reading |
-  | 12 | ds_load failed to get file size info (fstat) |
-  | 13 | ds_load failed to mmap the file |
-  | 14 | ds_load mmap failed for examples block |
-  | 15 | ds_load munmap failed for file |
+  | 1 | `nn_init` mmap failed |
+  | 2 | `nn_destroy` munmap failed |
+  | 3 | `nn_save` failed to open file for writing |
+  | 4 | `nn_load` failed to open file for reading |
+  | 5 | `nn_load` failed to get file size info (fstat) |
+  | 6 | `nn_load` mmap failed |
+  | 7 | `nn_load` munmap failed |
+  | 8 | `ds_destroy` munmap failed |
+  | 9 | `ds_deep_destroy` munmap failed |
+  | 10 | `ds_load` mmap failed for data block |
+  | 11 | `ds_load` failed to open file for reading |
+  | 12 | `ds_load` failed to get file size info (fstat) |
+  | 13 | `ds_load` failed to mmap the file |
+  | 14 | `ds_load` mmap failed for examples block |
+  | 15 | `ds_load` munmap failed for file |
+  | 16 | `ds_train_test_split` mmap failed for test set |
+  | 17 | `ds_train_test_split` mmap failed for train set |
   
 ## Non-features
 - **Portability**. This has been tested on my M1 Macbook Pro, and I would assume it would work on any other Apple Silicon Mac, but I don't have access to an array of
@@ -428,7 +434,7 @@ for 100 epochs, and printing the average loss over the held-out test set.
 This demo loads the [Iris](https://archive.ics.uci.edu/ml/datasets/iris) dataset,
 trains a network on it for 25 epochs, and dumps the trained network to a file.
 <details>
-  <summary>Example output</summary>
+  <summary>Example output:</summary>
   
   ```
   Epoch 0 | Loss: 1.6004945877
@@ -467,7 +473,7 @@ true label 2. Obviously, the network does not know this (we are asking it to
 predict these values); the important thing is that it outputs values somewhat
 close to the true values for each example.
 <details>
-  <summary>Example output</summary>
+  <summary>Example output:</summary>
   
   ```
   Predictions:
