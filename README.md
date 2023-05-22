@@ -84,7 +84,8 @@ purely for educational/entertainment purposes :). Enjoy!
   over a given dataset.
 - **Saving/loading models**. Want to pretrain a model, dump it to a file, and
   recover the model somewhere else without having to retrain it? Siliconnn can
-  do that.
+  do that. It also serves as a way for you to pause training after some number
+  of epochs and resume it without starting over from scratch.
 - **Legibility**. The assembly source is readable (well, about as readable as
   assembly can get). It is written letter-for-letter by hand, with zero help
   from compilers, and I personally think it shows; every instruction has a
