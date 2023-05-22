@@ -1,5 +1,8 @@
 *.o
-demo*
+demo1
+demo2
+demo3
+demo.nn
 *.sublime-project
 *.sublime-workspace
 helloworld/

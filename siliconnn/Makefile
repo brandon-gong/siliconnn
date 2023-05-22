@@ -1,10 +1,22 @@
-CC=gcc
-CFLAGS=-Wall
-
-all: demo1
+all: demo1 demo2 demo3
 
 demo1: demo1.o ds_destroy.o ds_deep_destroy.o ds_consume_past_char.o ds_parse_int.o ds_parse_double.o ds_parse_data.o ds_load.o ut_random.o ds_shuffle.o ds_train_test_split.o ut_itoa.o ut_dtoa.o ds_show.o ds_normalize.o nn_formula.o nn_zero_outputs.o nn_random_weights.o nn_init.o nn_destroy.o nn_forward.o nn_backward.o nn_average_loss.o nn_train.o nn_save.o nn_load.o
-	$(CC) $(CFLAGS) $^ -o demo1
+	ld -o demo1 $^ -lSystem -syslibroot `xcrun -sdk macosx --show-sdk-path` -arch arm64
+
+demo2: demo2.o ds_destroy.o ds_deep_destroy.o ds_consume_past_char.o ds_parse_int.o ds_parse_double.o ds_parse_data.o ds_load.o ut_random.o ds_shuffle.o ds_train_test_split.o ut_itoa.o ut_dtoa.o ds_show.o ds_normalize.o nn_formula.o nn_zero_outputs.o nn_random_weights.o nn_init.o nn_destroy.o nn_forward.o nn_backward.o nn_average_loss.o nn_train.o nn_save.o nn_load.o
+	ld -o demo2 $^ -lSystem -syslibroot `xcrun -sdk macosx --show-sdk-path` -arch arm64
+
+demo3: demo3.o ds_destroy.o ds_deep_destroy.o ds_consume_past_char.o ds_parse_int.o ds_parse_double.o ds_parse_data.o ds_load.o ut_random.o ds_shuffle.o ds_train_test_split.o ut_itoa.o ut_dtoa.o ds_show.o ds_normalize.o nn_formula.o nn_zero_outputs.o nn_random_weights.o nn_init.o nn_destroy.o nn_forward.o nn_backward.o nn_average_loss.o nn_train.o nn_save.o nn_load.o
+	ld -o demo3 $^ -lSystem -syslibroot `xcrun -sdk macosx --show-sdk-path` -arch arm64
+
+demo1.o: demo1.s
+	as -arch arm64 -o demo1.o demo1.s
+
+demo2.o: demo2.s
+	as -arch arm64 -o demo2.o demo2.s
+
+demo3.o: demo3.s
+	as -arch arm64 -o demo3.o demo3.s
 
 ds_destroy.o: dataset/destroy.s
 	as -arch arm64 -o ds_destroy.o dataset/destroy.s
