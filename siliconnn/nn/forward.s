@@ -28,8 +28,7 @@ _nn_forward:
 	// reuse this slot to store the iterator in the sigmoid loop.
 	SUB SP, SP, #32                  // Of course, need to keep SP 16-byte aligned
 	STR LR, [SP]                     // Store the return address in [SP]
-	STR X0, [SP, #8]                 // Store pointer to net in [SP + 8]
-	STR X1, [SP, #16]                // Store pointer to example in [SP + 16]
+	STP X0, X1, [SP, #8]             // Store pointers to net and example
 
 	// Since we compute the outputs for each neuron by iteratively summing, we
 	// need to make sure we are starting from zero (otherwise previous forward
