@@ -29,17 +29,25 @@
 // [SP + 16]: Stores the file descriptor to the opened file that we write to.
 _nn_save:
 	SUB SP, SP, #32             // Allocate space on stack, per above
-	STR LR, [SP]                // Store the return address into [SP + 0]
+	STR LR, [SP, #16]           // Store the return address into [SP + 16] (see comment below)
 	STR X0, [SP, #8]            // Store the pointer to the net in [SP + 8]
 
 	// We want to (potentially create and) open the file given at the path in X1.
+	// This is one of the most confusing things I had to deal with with this
+	// project - for some reason, it seems that open expects the mode to be the
+	// value that the stack pointer points at; it ignores whatever we pass into
+	// X2. So you'll see me load the permissions into [SP + 0], invoke open,
+	// and then put our return address back into SP where we specified it.
 	MOV X0, X1                  // First argument to open: path to file to open
 	MOV X1, #0x601              // Flags: O_WRONLY | O_CREAT | O_TRUNC
 	MOV X2, #448                // Create the file with full permissions
+	STR X2, [SP]                // Store these permissions under [SP]
 	BL _open                    // Open the file for writing
 	CMP X0, #0                  // Check if returned file descriptor is negative
 	B.LT open_err               // If so, couldn't open the file
-	STR X0, [SP, #16]           // Otherwise, save the fd in the stack
+	LDR LR, [SP, #16]           // Get ret addr from where we temporarily stashed it
+	STR LR, [SP]                // Put it where we specified above
+	STR X0, [SP, #16]           // Save the fd in the stack
 
 	// We now set up our first call to write, which will save input_size,
 	// hidden_size, and learning_rate. Conveniently, the first argument to write
