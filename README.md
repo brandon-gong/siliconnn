@@ -137,6 +137,7 @@ features, splitting into training and testing sets, training on the train set
 for 100 epochs, and printing the average loss over the held-out test set.
 <details>
   <summary>Example output:</summary>
+  
   ```
   ----------TRAIN SET-----------
   0 | 1,0.08,-0.75,-0.97,-1.19,-0.12,0.16,0.61,-0.65,-0.38,-0.58,0.97,0.11,0.86
@@ -428,6 +429,7 @@ This demo loads the [Iris](https://archive.ics.uci.edu/ml/datasets/iris) dataset
 trains a network on it for 25 epochs, and dumps the trained network to a file.
 <details>
   <summary>Example output</summary>
+  
   ```
   Epoch 0 | Loss: 1.6004945877
   Epoch 1 | Loss: 0.0931686257
@@ -466,6 +468,7 @@ predict these values); the important thing is that it outputs values somewhat
 close to the true values for each example.
 <details>
   <summary>Example output</summary>
+  
   ```
   Epoch 0 | Loss: 1.6004945877
   Epoch 1 | Loss: 0.0931686257
