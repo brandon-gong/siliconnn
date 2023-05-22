@@ -459,7 +459,7 @@ trains a network on it for 25 epochs, and dumps the trained network to a file.
   ```
 </details>
 
-## `demo3`
+### `demo3`
 This demo demonstrates loading the pretrained network from the file created by
 `demo2` and using it to classify some unlabeled iris examples. The first example
 has true label 0, the second label has true label 1, and the third label has
