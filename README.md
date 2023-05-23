@@ -505,11 +505,9 @@ and some files deep in my local machine with codes, but everything seems outdate
 
 Worse, making system calls directly like above makes the code subject to breaking if Apple ever moves things around without telling anyone.
 For these reasons, I have opted to make system calls the way they want me to, simply by calling their C functions with `BL _munmap`, for example.
-For consistency, I do this for system calls even that I know can be called without the C library, such as `write` and `open`. Yes, it's unfortunate
-that we have to rely on the C library at all, but ultimately the logic of my code barely changes (basically all `MOV + SVC` combos are replaced with
+For consistency, I do this for system calls even that I know can be called without the C library, such as `write` and `open`. Ultimately, the logic
+of my code barely changes (basically all `MOV + SVC` combos are replaced with
 a single `BL`, everything else around it pretty much untouched), and this guarantees the stability of this code in future versions of macOS.
 
 And I cannot figure out how to get `exp` to work. I did find a page in the ARM Aarch64 documentation for [`FEXPA`](https://developer.arm.com/documentation/ddi0596/2021-12/SVE-Instructions/FEXPA--Floating-point-exponential-accelerator-), which appears to be exponential-function related, but whenever I try to
-use this function I get a `SIGILL`. And I cannot dig into how the standard library does it, because Apple has hidden the implementation so well
-that the .dylib doesn't even exist in the filesystem. So after hitting my head against the wall over this for about two days, I've realized it's
-just not worth it and have opted to just call `exp` from `math.h`. If you know how to do it otherwise, open an issue!
+use this function I get a `SIGILL`. So for the time being, I have opted to stick with `libSystem`'s `exp` function.
