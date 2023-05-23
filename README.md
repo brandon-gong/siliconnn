@@ -10,6 +10,11 @@
 - [Demos](#demos)
 - [Pure assembly or not?](#pure-assembly-or-not)
 
+The `ref_impl` and `siliconnn` directories also contain their own READMEs with
+more specific technical details:
+- [Reference implementation README](https://github.com/brandon-gong/siliconnn/blob/main/ref_impl/README.md)
+- [siliconnn implementation README](https://github.com/brandon-gong/siliconnn/blob/main/siliconnn/README.md)
+
 ## Introduction
 Siliconnn is a small yet surprisingly featureful neural network implementation,
 written in pure ARM64 (AArch64) assembly for Apple Silicon. Included in this
