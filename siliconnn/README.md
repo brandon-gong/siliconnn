@@ -230,7 +230,7 @@ typedef struct nn {
 } nn;
 extern int itoa(char *buf, int x);
 extern int dtoa(char *buf, double x, int precision);
-extern void seed();
+extern void seed(void);
 extern void ds_destroy(dataset *ds);
 extern void ds_deep_destroy(dataset *ds);
 extern void ds_load(char* fpath, int numrows, int numcols, dataset *ds);
